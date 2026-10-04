@@ -1,10 +1,19 @@
 # The Moat
 
-**A RimWorld mod for players who love subterranean fortresses, single chokepoints, and surviving under siege.**
+<p align="center">
+  <img src="About/Icon.png" alt="The Moat Mod Icon" width="220" style="border-radius: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+</p>
 
-*Created by **Keldarton***  
-*Supported RimWorld Versions: **1.5**, **1.6***  
-*Requires: **Harmony***
+<p align="center">
+  <strong>A RimWorld mod for players who love subterranean fortresses, single chokepoints, and surviving under siege.</strong>
+</p>
+
+<p align="center">
+  <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538"><img src="https://img.shields.io/badge/Steam%20Workshop-3813355538-blue?logo=steam" alt="Steam Workshop"></a>
+  <img src="https://img.shields.io/badge/RimWorld-1.5%20%7C%201.6-brightgreen" alt="RimWorld Version">
+  <img src="https://img.shields.io/badge/Author-Keldarton-orange" alt="Author">
+  <a href="https://github.com/federicogiorgi/TheMoat"><img src="https://img.shields.io/badge/GitHub-federicogiorgi%2FTheMoat-black?logo=github" alt="GitHub Repo"></a>
+</p>
 
 ---
 
@@ -71,26 +80,29 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 
 ---
 
-## Installation
+## Installation & Links
 
-### Via Steam Workshop
-1. Subscribe to **The Moat** on the Steam Workshop.
-2. In RimWorld, go to **Mods** and enable **Harmony**, then enable **The Moat** (placed after Harmony).
-3. Start a **New Game** on any world tile!
+- **Steam Workshop:** [Subscribe to The Moat on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538)
+- **GitHub Repository:** [federicogiorgi/TheMoat](https://github.com/federicogiorgi/TheMoat)
 
-### Manual Installation
-1. Clone or download this repository.
-2. Place the folder into your RimWorld mods directory:
-   - Windows: `<Steam>/steamapps/common/RimWorld/Mods/TheMoat`
-3. Launch RimWorld, enable **Harmony** and **The Moat** in the Mods menu, and enjoy.
+### How to Play
+1. Enable **Harmony** near the top of your mod load order.
+2. Enable **The Moat**.
+3. Start a **New Game** on any world tile.
+4. Your starting colony will spawn facing the massive mountain barrier on the left!
 
 ---
 
-## Requirements & Compatibility
+## How to Update the Mod on Steam Workshop
 
-- **Harmony** library required.
-- Compatible with RimWorld **1.5** and **1.6**.
-- Safe to add to existing modlists. Map generation applies whenever you begin a new colony.
+RimWorld tracks the Workshop upload via the file `About/PublishedFileId.txt` (which contains your Workshop Item ID: `3813355538`).
+
+Whenever you want to release an update:
+1. Make your code or asset changes in your local mod folder.
+2. In RimWorld, go to **Options** and make sure **Development mode** is enabled (green ✔️).
+3. Open **Mods**, select **The Moat**, and click **`[Advanced...]`**.
+4. Click **"Upload to Steam Workshop"**.
+5. RimWorld reads `PublishedFileId.txt`, recognizes that the item already exists, and pushes your changes directly as an **update** to the existing Workshop page, prompting you for changelog notes!
 
 ---
 
