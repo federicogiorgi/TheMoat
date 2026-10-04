@@ -1,7 +1,7 @@
 # The Moat
 
 <p align="center">
-  <img src="About/Icon.png" alt="The Moat Mod Icon" width="220" style="border-radius: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  <img src="About/Preview.png" alt="The Moat - RimWorld Mod" width="100%">
 </p>
 
 <p align="center">
