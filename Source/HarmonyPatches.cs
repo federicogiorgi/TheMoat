@@ -151,7 +151,7 @@ namespace TheMoat
         [HarmonyPatch(typeof(GenStep_ScatterShrines), "CanScatterAt")]
         public static class Patch_ScatterShrines_CanScatterAt
         {
-            public static bool Prefix(GenStep_ScatterShrines __instance, IntVec3 loc, Map map, ref bool __result)
+            public static bool Prefix(GenStep_ScatterShrines __instance, IntVec3 c, Map map, ref bool __result)
             {
                 try
                 {
@@ -160,14 +160,14 @@ namespace TheMoat
                         int splitX = MoatManager.GetSplitX(map);
 
                         // Shrines must spawn on the right plains
-                        if (loc.x < splitX + 8 || loc.x > map.Size.x - 12 || loc.z < 12 || loc.z > map.Size.z - 12)
+                        if (c.x < splitX + 8 || c.x > map.Size.x - 12 || c.z < 12 || c.z > map.Size.z - 12)
                         {
                             __result = false;
                             return false;
                         }
 
                         // Must be standable and unroofed
-                        if (!loc.Standable(map) || map.roofGrid.Roofed(loc))
+                        if (!c.Standable(map) || map.roofGrid.Roofed(c))
                         {
                             __result = false;
                             return false;
