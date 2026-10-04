@@ -19,13 +19,27 @@
     <li>brrainz.harmony</li>
     <li>Ludeon.RimWorld</li>
   </loadAfter>
-  <description>
-Forces your starting base map (and only that base) to generate with 50% impassable mountain covering the entire western half.
+  <description>A mod for players who want to build a subterranean colony, heavily relying on the supreme defensive capabilities of living under a mountain.
 
-Features:
-- Left 50%: Solid, sheer impassable mountain rock with overhead mountain roof. No caves, no hollow spots, no special features inside the mountain.
-- Right 50%: Open flat land without mountains, hills, or lakes. All natural features spawn freely: trees, soil types, ancient dangers, Void Monolith, steam geysers, ruins, roads, and wildlife.
-- Only the starting base: Affects only your initial starting base map. Any future settlements, quest sites, encounter maps, or camps generate completely normal vanilla maps.
-- Mod Settings: Configure mountain coverage percentage, toggle ore veins in the rock wall, and customize behavior via Options -> Mod Settings.
+Have you ever wanted to carve your entire civilization into living rock, safe from aerial drop pods, while funneling every hostile raid into a single, fortified chokepoint? The Moat is built for players who love the atmosphere of being besieged inside a cozy, impenetrable mountain fortress while facing the untamed wild outside.
+
+KEY DEFENSIVE HIGHLIGHTS:
+- Single Choke Point: Channel every enemy raid, manhunter pack, and mechanoid threat into a single grand entrance or killbox.
+- No Aerial Drop Pod Raids: The entire mountain half is sheltered under thick overhead mountain (RoofRockThick) — no drop pods crashing through your bedrooms, hospital, or rec room!
+- Concentrated Defenses: Forget 360-degree perimeter paranoia. Focus your turrets, bunkers, and traps where it matters.
+- A Cozy Mountain to Defend: Survive in comfort under stone while chaos reigns in the wilderness.
+
+MAP GENERATION:
+- Left Half (West): Solid, impassable mountain rock with overhead mountain roof. Zero caves, zero hollow pockets, zero surprise backdoors. Ore veins spawn throughout the mountain by default so your miners have resources to unearth.
+- Right Half (East): Flat open land free of obstructive mountains, hills, or lakes. All vanilla surface features generate freely: trees, fertile soil, ancient dangers, steam geysers, ruins, roads, and the Anomaly Void Monolith.
+- Starting Colony Only: Affects only your initial colony map. All future quest maps, satellite settlements, and encounter sites generate standard vanilla terrain.
+
+CUSTOMIZABLE SETTINGS:
+- Mountain width slider (30% to 70%, default 50%).
+- Toggle mineable ore veins in the mountain (default: ON).
+- Toggle removal of lakes on plains (default: ON).
+- Toggle flattening of hills on plains (default: ON).
+
+Requires Harmony. Compatible with RimWorld 1.5 and 1.6.
   </description>
 </ModMetaData>
