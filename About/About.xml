@@ -42,10 +42,16 @@ CUSTOMIZABLE SETTINGS:
 - Toggle removal of lakes on plains (default: ON).
 - Toggle flattening of hills on plains (default: ON).
 
+REQUIRED MODS:
+- Harmony is REQUIRED:
+  https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077
+  (Make sure Harmony is loaded at the top of your mod list, before Core and before The Moat).
+- No other mods or DLCs are required! Fully compatible with base RimWorld as well as Biotech, Ideology, Royalty, Anomaly, and modded playthroughs.
+
 GITHUB REPOSITORY:
 https://github.com/federicogiorgi/TheMoat
 Issues, discussions, and contributions are welcome!
 
-Requires Harmony. Compatible with RimWorld 1.5 and 1.6.
+Compatible with RimWorld 1.5 and 1.6.
   </description>
 </ModMetaData>
