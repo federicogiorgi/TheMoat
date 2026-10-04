@@ -38,9 +38,8 @@ When you generate your starting colony map, **The Moat** splits the map into two
 |       WEST (LEFT HALF):           |       EAST (RIGHT HALF):          |
 |                                   |                                   |
 |   - 100% Solid Mountain Rock      |   - Flat Open Plains              |
-|   - Overhead Mountain Roof        |   - No Hills, No Lakes            |
 |   - NO Caves or Hollow Spots      |   - Farmlands, Trees & Pastures   |
-|   - NO Surprise Backdoors         |   - Geysers, Ruins & Monolith     |
+|   - No Ruins/Shrines (Except Ores)|   - Geysers, Ruins & Monolith     |
 |   - Mineable Ore Veins (Config)   |   - Colonists & Pods Arrive Here  |
 |                                   |                                   |
 |             FORTRESS              |           WILDERNESS              |
@@ -54,8 +53,7 @@ When you generate your starting colony map, **The Moat** splits the map into two
 - **100% Solid Rock Barrier:** The left 50% of the map is packed solid with natural rock walls.
 - **True Overhead Mountain:** Complete `RoofRockThick` coverage preventing all overhead drop-pod insertions.
 - **Zero Caves & Hollow Pockets:** Guaranteed no hidden caverns, no insect nest pockets waiting to be uncovered, and no secret rear exits.
-- **Pristine Excavation:** Shrines, ancient dangers, steam geysers, ruins, and monoliths are strictly prohibited from spawning inside the mountain, giving you clean rock to carve your halls.
-- **Ore Veins (Enabled by Default):** Rich veins of steel, plasteel, gold, components, and jade can still embed themselves into the stone for your miners to unearth.
+- **No Special Features (Except Ores):** Shrines, ancient dangers, steam geysers, ruins, and monoliths are strictly prohibited from spawning inside the mountain, giving you clean rock to carve your halls. The only exception is **mineable ore veins**, which can still be found and spawn throughout the rock by default so your miners have plentiful resources to unearth.
 
 ### 2. East Half (The Untamed Wilderness)
 - **Flat Open Land:** Mountains and rocky hills are cleared away, giving you wide-open expanses for agriculture, windmills, solar arrays, and pastures.
