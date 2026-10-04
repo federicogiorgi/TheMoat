@@ -1,0 +1,13 @@
+# IDE and system files
+.vs/
+.vscode/
+.idea/
+Thumbs.db
+*.DS_Store
+
+# Build artifacts (keeping Assemblies/*.dll for RimWorld mod distribution)
+*.pdb
+*.tmp
+*.log
+obj/
+bin/

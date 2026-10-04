@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>The Moat</name>
+  <author>Keldarton</author>
+  <packageId>Keldarton.TheMoat</packageId>
+  <supportedVersions>
+    <li>1.5</li>
+    <li>1.6</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+      <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>brrainz.harmony</li>
+    <li>Ludeon.RimWorld</li>
+  </loadAfter>
+  <description>
+Forces your starting base map (and only that base) to generate with 50% impassable mountain covering the entire western half.
+
+Features:
+- Left 50%: Solid, sheer impassable mountain rock with overhead mountain roof. No caves, no hollow spots, no special features inside the mountain.
+- Right 50%: Open flat land without mountains, hills, or lakes. All natural features spawn freely: trees, soil types, ancient dangers, Void Monolith, steam geysers, ruins, roads, and wildlife.
+- Only the starting base: Affects only your initial starting base map. Any future settlements, quest sites, encounter maps, or camps generate completely normal vanilla maps.
+- Mod Settings: Configure mountain coverage percentage, toggle ore veins in the rock wall, and customize behavior via Options -> Mod Settings.
+  </description>
+</ModMetaData>
