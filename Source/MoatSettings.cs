@@ -7,7 +7,7 @@ namespace TheMoat
     public class MoatSettings : ModSettings
     {
         public float mountainPercent = 0.50f;
-        public bool allowOresInMountain = false;
+        public bool allowOresInMountain = true;
         public bool removeWaterOnPlains = true;
         public bool flattenHillsOnPlains = true;
 
@@ -15,7 +15,7 @@ namespace TheMoat
         {
             base.ExposeData();
             Scribe_Values.Look(ref mountainPercent, "mountainPercent", 0.50f);
-            Scribe_Values.Look(ref allowOresInMountain, "allowOresInMountain", false);
+            Scribe_Values.Look(ref allowOresInMountain, "allowOresInMountain", true);
             Scribe_Values.Look(ref removeWaterOnPlains, "removeWaterOnPlains", true);
             Scribe_Values.Look(ref flattenHillsOnPlains, "flattenHillsOnPlains", true);
         }
@@ -53,7 +53,7 @@ namespace TheMoat
             if (listing.ButtonText("Reset to Defaults"))
             {
                 mountainPercent = 0.50f;
-                allowOresInMountain = false;
+                allowOresInMountain = true;
                 removeWaterOnPlains = true;
                 flattenHillsOnPlains = true;
             }
