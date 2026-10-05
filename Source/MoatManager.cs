@@ -314,10 +314,18 @@ namespace TheMoat
             candidates.Shuffle();
 
             int clearedSpots = 0;
+            Dictionary<string, int> rejections = new Dictionary<string, int>();
             foreach (IntVec3 c in candidates)
             {
                 if (clearedSpots >= MechMaxClearedSpots) break;
-                if (!IsClearExceptPlants(map, CellRect.CenteredOn(c, MechSpotRadius))) continue;
+                string reason = WhyNotClearExceptPlants(map, CellRect.CenteredOn(c, MechSpotRadius));
+                if (reason != null)
+                {
+                    int n;
+                    rejections.TryGetValue(reason, out n);
+                    rejections[reason] = n + 1;
+                    continue;
+                }
 
                 int cleared = ClearPlants(map, CellRect.CenteredOn(c, MechSpotRadius));
                 clearedSpots++;
@@ -329,23 +337,30 @@ namespace TheMoat
                 return true;
             }
 
-            Log.Warning("[The Moat] Found no room for ancient mech remains on the plains.");
+            Log.Warning("[The Moat] Found no room for ancient mech remains on the plains (" + candidates.Count + " cells, "
+                + clearedSpots + " spots rejected by vanilla, other rejections: "
+                + string.Join(", ", rejections.OrderByDescending(kv => kv.Value).Take(8).Select(kv => kv.Key + " " + kv.Value).ToArray()) + ").");
             return false;
         }
 
-        private static bool IsClearExceptPlants(Map map, CellRect rect)
+        // Null if the area only has plants in the way, otherwise what blocks it
+        private static string WhyNotClearExceptPlants(Map map, CellRect rect)
         {
             foreach (IntVec3 c in rect)
             {
-                if (!c.InBounds(map) || c.Roofed(map) || c.GetEdifice(map) != null || !c.Standable(map)) return false;
+                if (!c.InBounds(map)) return "out of bounds";
+                if (c.Roofed(map)) return "roofed";
+                Building edifice = c.GetEdifice(map);
+                if (edifice != null) return "edifice " + edifice.def.defName;
+                if (!c.Walkable(map)) return "not walkable (" + c.GetTerrain(map).defName + ")";
 
                 List<Thing> things = c.GetThingList(map);
                 for (int i = 0; i < things.Count; i++)
                 {
-                    if (!things[i].def.IsPlant) return false;
+                    if (!things[i].def.IsPlant) return "thing " + things[i].def.defName;
                 }
             }
-            return true;
+            return null;
         }
 
         private static int ClearPlants(Map map, CellRect rect)
