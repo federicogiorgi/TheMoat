@@ -36,7 +36,7 @@ MAP GENERATION:
 
 CUSTOMIZABLE SETTINGS:
 - Mountain width slider (30% to 70%, default 50%).
-- Toggle mineable ore veins in the mountain (default: ON).
+- Toggle mineable ore veins in the mountain (default: ON). Ore density matches a vanilla mountainous map, even on flat tiles.
 - Toggle removal of lakes on plains (default: ON).
 - Toggle flattening of hills on plains (default: ON).
 

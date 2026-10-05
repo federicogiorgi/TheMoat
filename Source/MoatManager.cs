@@ -152,7 +152,7 @@ namespace TheMoat
                         // 2. Solid rock wall
                         Building edifice = c.GetEdifice(map);
                         bool isNaturalRock = edifice != null && edifice.def != null && edifice.def.building != null && edifice.def.building.isNaturalRock;
-                        bool isMineableOre = isNaturalRock && edifice.def.building.mineableThing != null;
+                        bool isMineableOre = isNaturalRock && edifice.def.building.isResourceRock;
 
                         if (!isNaturalRock || (!MoatMod.Settings.allowOresInMountain && isMineableOre))
                         {
@@ -197,6 +197,95 @@ namespace TheMoat
             {
                 Log.Error("[The Moat] Error in EnforceRocksAndRoofs: " + ex);
             }
+        }
+
+        // Vanilla scales ore lumps by the tile's hilliness over the whole map (a flat tile gets about a quarter
+        // of what a mountainous one gets), so the mountain half ends up nearly empty on flat tiles.
+        // Top it up to roughly the ore density of a vanilla mountainous map.
+        private const float OreLumpsPer10kMountainCells = 20f;
+        private const int OreLumpEdgeMargin = 5;
+
+        public static void TopUpMountainOres(Map map, GenStepParams parms)
+        {
+            if (!IsStartingBase(map)) return;
+            if (!MoatMod.Settings.allowOresInMountain) return;
+
+            try
+            {
+                int splitX = GetSplitX(map);
+                int maxCenterX = splitX - OreLumpEdgeMargin;
+                if (maxCenterX <= 0) return;
+
+                int targetLumps = Mathf.RoundToInt(splitX * map.Size.z / 10000f * OreLumpsPer10kMountainCells);
+                int existingLumps = CountOreLumps(map, splitX);
+                int lumpsToAdd = targetLumps - existingLumps;
+                if (lumpsToAdd <= 0) return;
+
+                MoatOreScatterer scatterer = new MoatOreScatterer();
+                int added = 0;
+                for (int i = 0; i < lumpsToAdd; i++)
+                {
+                    for (int attempt = 0; attempt < 50; attempt++)
+                    {
+                        IntVec3 c = new IntVec3(Rand.Range(0, maxCenterX), 0, Rand.Range(0, map.Size.z));
+                        Building edifice = c.GetEdifice(map);
+                        if (edifice != null && edifice.def.IsNonResourceNaturalRock)
+                        {
+                            scatterer.ScatterLump(c, map, parms);
+                            added++;
+                            break;
+                        }
+                    }
+                }
+
+                Log.Message("[The Moat] Ore lumps in the mountain: " + existingLumps + " from vanilla, " + added + " added.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[The Moat] Error in TopUpMountainOres: " + ex);
+            }
+        }
+
+        // Counts connected groups of ore cells (4-way) on the mountain side
+        private static int CountOreLumps(Map map, int splitX)
+        {
+            int sizeX = map.Size.x;
+            int sizeZ = map.Size.z;
+            bool[] visited = new bool[sizeX * sizeZ];
+            Stack<IntVec3> stack = new Stack<IntVec3>();
+            int lumps = 0;
+
+            for (int z = 0; z < sizeZ; z++)
+            {
+                for (int x = 0; x < splitX; x++)
+                {
+                    if (visited[z * sizeX + x] || !IsOreAt(map, new IntVec3(x, 0, z))) continue;
+
+                    lumps++;
+                    visited[z * sizeX + x] = true;
+                    stack.Push(new IntVec3(x, 0, z));
+                    while (stack.Count > 0)
+                    {
+                        IntVec3 cur = stack.Pop();
+                        for (int d = 0; d < 4; d++)
+                        {
+                            IntVec3 n = cur + GenAdj.CardinalDirections[d];
+                            if (n.x < 0 || n.x >= splitX || n.z < 0 || n.z >= sizeZ) continue;
+                            int idx = n.z * sizeX + n.x;
+                            if (visited[idx] || !IsOreAt(map, n)) continue;
+                            visited[idx] = true;
+                            stack.Push(n);
+                        }
+                    }
+                }
+            }
+            return lumps;
+        }
+
+        private static bool IsOreAt(Map map, IntVec3 c)
+        {
+            Building edifice = c.GetEdifice(map);
+            return edifice != null && edifice.def.building != null && edifice.def.building.isResourceRock;
         }
 
         public static void CleanTerrain(Map map)
@@ -287,15 +376,22 @@ namespace TheMoat
         {
             if (cachedFallbackRock != null) return cachedFallbackRock;
 
+            if (ThingDefOf.Granite != null)
+            {
+                cachedFallbackRock = ThingDefOf.Granite;
+                return cachedFallbackRock;
+            }
+
+            // Plain stone (not an ore), with a natural floor so it is a real rock type and not e.g. collapsed rocks
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
-                if (def.building != null && def.building.isNaturalRock && def.building.mineableThing == null)
+                if (def.IsNonResourceNaturalRock && def.building.naturalTerrain != null)
                 {
                     cachedFallbackRock = def;
                     return def;
                 }
             }
-            return ThingDefOf.Granite;
+            return null;
         }
 
         public static void EnsurePlayerStartSpot(Map map)

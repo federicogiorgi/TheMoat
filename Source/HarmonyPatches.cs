@@ -76,6 +76,8 @@ namespace TheMoat
             {
                 try
                 {
+                    // Ores first, so lumps poking past the split line get cleared by the enforcement pass
+                    MoatManager.TopUpMountainOres(map, parms);
                     MoatManager.EnforceRocksAndRoofs(map);
                 }
                 catch (Exception ex)
