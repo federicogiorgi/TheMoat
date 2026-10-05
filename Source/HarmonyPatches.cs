@@ -188,6 +188,33 @@ namespace TheMoat
             }
         }
 
+        // 7b. Ancient mech remains (Ideology): find a spot on the plains, see MoatManager.TryFindAncientMechsCell
+        [HarmonyPatch(typeof(GenStep_Scatterer), "TryFindScatterCell")]
+        public static class Patch_Scatterer_TryFindScatterCell
+        {
+            public static bool Prefix(GenStep_Scatterer __instance, Map map, ref IntVec3 result, ref bool __result)
+            {
+                try
+                {
+                    if (__instance is GenStep_ScatterAncientMechs && MoatManager.IsStartingBase(map))
+                    {
+                        IntVec3 cell;
+                        if (MoatManager.TryFindAncientMechsCell(__instance, map, out cell))
+                        {
+                            result = cell;
+                            __result = true;
+                            return false;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[The Moat] Error in Patch_Scatterer_TryFindScatterCell: " + ex);
+                }
+                return true;
+            }
+        }
+
         // 8. Player Start Spot
         [HarmonyPatch(typeof(GenStep_FindPlayerStartSpot), "Generate")]
         public static class Patch_FindPlayerStartSpot_Generate

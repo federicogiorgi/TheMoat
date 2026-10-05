@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -286,6 +288,82 @@ namespace TheMoat
         {
             Building edifice = c.GetEdifice(map);
             return edifice != null && edifice.def.building != null && edifice.def.building.isResourceRock;
+        }
+
+        // Vanilla only puts ancient mech remains on a patch with no plants at all (they come from gravel and rocky
+        // ground near hills). The flattened, grassy plains have none, so search them ourselves and clear the plants.
+        private const int MechSpotRadius = 3;      // 7x7, covers the biggest remains (5x5, 4x6) in any rotation
+        private const int MechClearRadius = 8;     // room for the warwalker's legs and claws around the torso
+        private const int MechEdgeMargin = 10;
+        private const int MechMaxClearedSpots = 20;  // don't strip the plains bare if vanilla keeps rejecting spots
+        private static readonly MethodInfo CanScatterAtMethod = AccessTools.Method(typeof(GenStep_Scatterer), "CanScatterAt");
+
+        public static bool TryFindAncientMechsCell(GenStep_Scatterer scatterer, Map map, out IntVec3 result)
+        {
+            result = IntVec3.Invalid;
+            int splitX = GetSplitX(map);
+
+            List<IntVec3> candidates = new List<IntVec3>();
+            for (int z = MechEdgeMargin; z < map.Size.z - MechEdgeMargin; z++)
+            {
+                for (int x = splitX + MechEdgeMargin; x < map.Size.x - MechEdgeMargin; x++)
+                {
+                    candidates.Add(new IntVec3(x, 0, z));
+                }
+            }
+            candidates.Shuffle();
+
+            int clearedSpots = 0;
+            foreach (IntVec3 c in candidates)
+            {
+                if (clearedSpots >= MechMaxClearedSpots) break;
+                if (!IsClearExceptPlants(map, CellRect.CenteredOn(c, MechSpotRadius))) continue;
+
+                int cleared = ClearPlants(map, CellRect.CenteredOn(c, MechSpotRadius));
+                clearedSpots++;
+                if (!(bool)CanScatterAtMethod.Invoke(scatterer, new object[] { c, map })) continue;
+
+                cleared += ClearPlants(map, CellRect.CenteredOn(c, MechClearRadius));
+                result = c;
+                Log.Message("[The Moat] Ancient mech remains placed on the plains at " + c + " (" + cleared + " plants cleared).");
+                return true;
+            }
+
+            Log.Warning("[The Moat] Found no room for ancient mech remains on the plains.");
+            return false;
+        }
+
+        private static bool IsClearExceptPlants(Map map, CellRect rect)
+        {
+            foreach (IntVec3 c in rect)
+            {
+                if (!c.InBounds(map) || c.Roofed(map) || c.GetEdifice(map) != null || !c.Standable(map)) return false;
+
+                List<Thing> things = c.GetThingList(map);
+                for (int i = 0; i < things.Count; i++)
+                {
+                    if (!things[i].def.IsPlant) return false;
+                }
+            }
+            return true;
+        }
+
+        private static int ClearPlants(Map map, CellRect rect)
+        {
+            int cleared = 0;
+            foreach (IntVec3 c in rect.ClipInsideMap(map))
+            {
+                List<Thing> things = c.GetThingList(map);
+                for (int i = things.Count - 1; i >= 0; i--)
+                {
+                    if (things[i].def.IsPlant)
+                    {
+                        things[i].Destroy(DestroyMode.Vanish);
+                        cleared++;
+                    }
+                }
+            }
+            return cleared;
         }
 
         public static void CleanTerrain(Map map)
