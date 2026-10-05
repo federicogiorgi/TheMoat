@@ -48,7 +48,7 @@ namespace TheMoat
         public static int GetSplitX(Map map)
         {
             float percent = MoatMod.Settings != null ? MoatMod.Settings.mountainPercent : 0.50f;
-            percent = Mathf.Clamp(percent, 0.10f, 0.90f);
+            percent = Mathf.Clamp(percent, MoatSettings.MinMountainPercent, MoatSettings.MaxMountainPercent);
             return (int)(map.Size.x * percent);
         }
 
@@ -296,20 +296,7 @@ namespace TheMoat
             {
                 int splitX = GetSplitX(map);
 
-                // Left side: natural stone floors under rock
-                for (int z = 0; z < map.Size.z; z++)
-                {
-                    for (int x = 0; x < splitX; x++)
-                    {
-                        IntVec3 c = new IntVec3(x, 0, z);
-                        ThingDef rockDef = GetRockDefForMap(map, c);
-
-                        if (rockDef != null && rockDef.building != null && rockDef.building.naturalTerrain != null)
-                        {
-                            map.terrainGrid.SetTerrain(c, rockDef.building.naturalTerrain);
-                        }
-                    }
-                }
+                // Left side: vanilla already lays the matching rock floor under each rock type
 
                 // Right side: replace any water/marsh with dry land
                 if (MoatMod.Settings.removeWaterOnPlains)
@@ -413,7 +400,7 @@ namespace TheMoat
                         {
                             return c.x >= splitX + 5 && c.Standable(map) && map.roofGrid.RoofAt(c) == null;
                         },
-                        false
+                        true
                     );
 
                     if (bestSpot.IsValid)
@@ -434,8 +421,6 @@ namespace TheMoat
 
             try
             {
-                EnsurePlayerStartSpot(map);
-
                 // Mark as generated in GameComponent
                 MoatGameComponent comp = Current.Game != null ? Current.Game.GetComponent<MoatGameComponent>() : null;
                 if (comp != null)
@@ -443,7 +428,7 @@ namespace TheMoat
                     comp.hasGeneratedStartingBase = true;
                 }
 
-                Log.Message("[The Moat] Starting base generation complete. The western 50% is protected by an impassable mountain cliff!");
+                Log.Message("[The Moat] Starting base generation complete. The western " + MoatMod.Settings.mountainPercent.ToString("P0") + " is protected by an impassable mountain cliff!");
             }
             catch (Exception ex)
             {

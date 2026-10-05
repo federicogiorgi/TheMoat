@@ -114,7 +114,7 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 
 ## How to Update the Mod on Steam Workshop
 
-RimWorld tracks Workshop updates using [`About/PublishedFileId.txt`](file:///C:/Users/feder/.gemini/antigravity/scratch/TheMoat/About/PublishedFileId.txt) (Workshop Item ID: `3813355538`).
+RimWorld tracks Workshop updates using [`About/PublishedFileId.txt`](About/PublishedFileId.txt) (Workshop Item ID: `3813355538`).
 
 Whenever you want to release an update:
 1. Make your code or asset changes in your local mod directory.

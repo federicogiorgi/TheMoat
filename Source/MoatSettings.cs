@@ -6,6 +6,9 @@ namespace TheMoat
 {
     public class MoatSettings : ModSettings
     {
+        public const float MinMountainPercent = 0.30f;
+        public const float MaxMountainPercent = 0.70f;
+
         public float mountainPercent = 0.50f;
         public bool allowOresInMountain = true;
         public bool removeWaterOnPlains = true;
@@ -18,6 +21,9 @@ namespace TheMoat
             Scribe_Values.Look(ref allowOresInMountain, "allowOresInMountain", true);
             Scribe_Values.Look(ref removeWaterOnPlains, "removeWaterOnPlains", true);
             Scribe_Values.Look(ref flattenHillsOnPlains, "flattenHillsOnPlains", true);
+
+            // Older versions allowed 10-90%
+            mountainPercent = Mathf.Clamp(mountainPercent, MinMountainPercent, MaxMountainPercent);
         }
 
         public void DoWindowContents(Rect inRect)
@@ -26,7 +32,7 @@ namespace TheMoat
             listing.Begin(inRect);
 
             listing.Label(string.Format("Mountain Width: {0:P0} of the map (West side)", mountainPercent));
-            mountainPercent = listing.Slider(mountainPercent, 0.10f, 0.90f);
+            mountainPercent = listing.Slider(mountainPercent, MinMountainPercent, MaxMountainPercent);
             listing.Gap(12f);
 
             listing.CheckboxLabeled(
