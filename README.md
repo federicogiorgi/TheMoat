@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538"><img src="https://img.shields.io/badge/Steam%20Workshop-3813355538-blue?logo=steam" alt="Steam Workshop"></a>
-  <img src="https://img.shields.io/badge/RimWorld-1.5%20%7C%201.6-brightgreen" alt="RimWorld Version">
+  <img src="https://img.shields.io/badge/RimWorld-1.6-brightgreen" alt="RimWorld Version">
   <img src="https://img.shields.io/badge/Author-Keldarton-orange" alt="Author">
   <a href="https://github.com/federicogiorgi/TheMoat"><img src="https://img.shields.io/badge/GitHub-federicogiorgi%2FTheMoat-black?logo=github" alt="GitHub Repo"></a>
 </p>
@@ -83,7 +83,7 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 - **[Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077)** is **REQUIRED**.  
   Make sure Harmony is loaded at the top of your mod list (before Core and before The Moat).
 - **No DLCs or other mods required!** Fully compatible with pure vanilla RimWorld, all official DLCs (Biotech, Ideology, Royalty, Anomaly), and extensive third-party modlists.
-- Compatible with RimWorld **1.5** and **1.6**.
+- Compatible with RimWorld **1.6**.
 - Safe to add to existing games (takes effect on new games or new colony map generations).
 
 ---

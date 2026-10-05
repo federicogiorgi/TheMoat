@@ -19,7 +19,6 @@ if not exist "%CSC%" (
 
 if %ERRORLEVEL% EQU 0 (
     echo [SUCCESS] Build succeeded! Copying to version assemblies and RimWorld game directory...
-    copy /Y %OUT_DLL% 1.5\Assemblies\TheMoat.dll >nul
     copy /Y %OUT_DLL% 1.6\Assemblies\TheMoat.dll >nul
     if exist "E:\SteamGames\Steam\steamapps\common\RimWorld\Mods\TheMoat" (
         xcopy /Y /S /I /Q . "E:\SteamGames\Steam\steamapps\common\RimWorld\Mods\TheMoat\" >nul

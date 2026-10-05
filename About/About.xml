@@ -5,7 +5,6 @@
   <packageId>Keldarton.TheMoat</packageId>
   <url>https://github.com/federicogiorgi/TheMoat</url>
   <supportedVersions>
-    <li>1.5</li>
     <li>1.6</li>
   </supportedVersions>
   <modDependencies>
@@ -51,6 +50,6 @@ GITHUB REPOSITORY:
 https://github.com/federicogiorgi/TheMoat
 Issues, discussions, and contributions are welcome!
 
-Compatible with RimWorld 1.5 and 1.6.
+Compatible with RimWorld 1.6.
   </description>
 </ModMetaData>
