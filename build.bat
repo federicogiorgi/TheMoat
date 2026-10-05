@@ -25,9 +25,14 @@ if %ERRORLEVEL% EQU 0 (
     copy /Y %OUT_DLL% 1.6\Assemblies\TheMoat.dll >nul
     if /I "%~dp0"=="%MOD_DIR%\" (
         echo [INFO] Building inside RimWorld\Mods\TheMoat, no copy needed.
-    ) else if exist "%MOD_DIR%" (
-        xcopy /Y /S /I /Q . "%MOD_DIR%\" >nul
-        echo [SUCCESS] Synchronized with RimWorld\Mods\TheMoat!
+    ) else (
+        rem Only the files the game needs: no git history, sources or build script
+        robocopy . "%MOD_DIR%" /MIR /NJH /NJS /NFL /NDL /NP /XD .git .vs .vscode .idea Source /XF build.bat .gitignore >nul
+        if errorlevel 8 (
+            echo [FAIL] Could not copy the mod to %MOD_DIR%
+        ) else (
+            echo [SUCCESS] Synchronized with RimWorld\Mods\TheMoat!
+        )
     )
 ) else (
     echo [FAIL] Build failed with errors.
