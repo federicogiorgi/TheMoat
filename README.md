@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538"><img src="https://img.shields.io/badge/Steam%20Workshop-3813355538-blue?logo=steam" alt="Steam Workshop"></a>
-  <img src="https://img.shields.io/badge/RimWorld-1.6-brightgreen" alt="RimWorld Version">
+  <img src="https://img.shields.io/badge/RimWorld-1.6%20%7C%201.7-brightgreen" alt="RimWorld Version">
   <img src="https://img.shields.io/badge/Author-Keldarton-orange" alt="Author">
   <a href="https://github.com/federicogiorgi/TheMoat"><img src="https://img.shields.io/badge/GitHub-federicogiorgi%2FTheMoat-black?logo=github" alt="GitHub Repo"></a>
 </p>
@@ -30,7 +30,7 @@
 
 ## Map Generation Layout
 
-When you generate your starting colony map, **The Moat** splits the map into two distinct worlds:
+When you generate your starting colony map, **The Moat** splits the map into two distinct worlds. The mountain sits on the **west** side by default; you can move it to the **east**, **north** or **south** side in the mod settings. The diagram shows the default layout:
 
 ```
 +-----------------------------------+-----------------------------------+
@@ -49,14 +49,14 @@ When you generate your starting colony map, **The Moat** splits the map into two
                                    Entrance
 ```
 
-### 1. West Half (The Mountain Fortress)
-- **100% Solid Rock Barrier:** The left 50% of the map is packed solid with natural rock walls.
+### 1. The Mountain Fortress (west by default)
+- **100% Solid Rock Barrier:** 50% of the map (adjustable from 30% to 70%) along the chosen edge is packed solid with natural rock walls.
 - **True Overhead Mountain:** Complete `RoofRockThick` coverage preventing all overhead drop-pod insertions.
 - **Zero Caves & Hollow Pockets:** Guaranteed no hidden caverns, no insect nest pockets waiting to be uncovered, and no secret rear exits.
 - **No Special Features (Except Ores):** Shrines, ancient dangers, steam geysers, ruins, and monoliths are strictly prohibited from spawning inside the mountain, giving you clean rock to carve your halls. The only exception is **mineable ore veins**, which can still be found and spawn throughout the rock by default so your miners have plentiful resources to unearth.
 - **Mountain-Level Ore Density:** Ore lumps are topped up to roughly the density of a vanilla mountainous map, even on flat tiles.
 
-### 2. East Half (The Untamed Wilderness)
+### 2. The Plains (The Untamed Wilderness)
 - **Flat Open Land:** Mountains and rocky hills are cleared away, giving you wide-open expanses for agriculture, windmills, solar arrays, and pastures.
 - **No Obstructive Lakes:** Swamps and deep lakes are dried into arable soil matching local biome fertility.
 - **Full Vanilla Features:** Soil varieties, rich soil, wild trees, grazing animals, steam geysers, ancient dangers, ruins, roads, and the Anomaly Void Monolith spawn cleanly across the plains.
@@ -72,7 +72,8 @@ When you generate your starting colony map, **The Moat** splits the map into two
 
 Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 
-- **Mountain Width Slider:** Adjust the width of the mountain barrier (from 30% up to 70% of the map width, default: **50%**).
+- **Mountain Side:** Place the mountain on the west, east, north or south side of the map (default: **West**).
+- **Mountain Size Slider:** Adjust how much of the map the mountain covers (from 30% up to 70%, default: **50%**).
 - **Allow Ore Veins in the Mountain:** Toggle whether mineable resources spawn inside the rock wall (default: **ON**).
 - **Remove Lakes on Plains:** Converts impassable water bodies into dry, buildable land (default: **ON**).
 - **Flatten Hills on Plains:** Removes minor rock formations and hills from the plains (default: **ON**).
@@ -84,7 +85,7 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 - **[Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077)** is **REQUIRED**.  
   Make sure Harmony is loaded at the top of your mod list (before Core and before The Moat).
 - **No DLCs or other mods required!** Fully compatible with pure vanilla RimWorld, all official DLCs (Biotech, Ideology, Royalty, Anomaly), and extensive third-party modlists.
-- Compatible with RimWorld **1.6**.
+- Compatible with RimWorld **1.6** and **1.7**.
 - Safe to add to existing games (takes effect on new games or new colony map generations).
 
 ---
@@ -102,13 +103,16 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
    - Enable **Harmony** (placed above Core / at the top of your mod list).
    - Enable **The Moat**.
 4. Click **Close** to reload mods.
-5. Start a **New Game** on any world tile. Your colonists will touch down on the open plains facing the sheer mountain fortress to their west!
+5. Start a **New Game** on any world tile. Your colonists will touch down on the open plains facing the sheer mountain fortress (to their west by default)!
 
 ### Manual Installation
 1. Download or clone this repository: `git clone https://github.com/federicogiorgi/TheMoat.git`
 2. Place the `TheMoat` folder into your RimWorld mods directory:
    - Windows: `<Steam>/steamapps/common/RimWorld/Mods/TheMoat`
 3. Launch RimWorld and enable Harmony and The Moat in the Mods menu.
+
+### Building from Source
+The mod is built for both RimWorld versions from the same code: `1.6/Assemblies` (.NET Framework 4.7.2, Harmony 2) and `1.7/Assemblies` (.NET 10, Harmony 3). Install the [.NET 10 SDK](https://dotnet.microsoft.com/download) and run `build.bat` (or `dotnet build TheMoat.csproj -c Release`).
 
 ---
 

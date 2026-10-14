@@ -6,6 +6,7 @@
   <url>https://github.com/federicogiorgi/TheMoat</url>
   <supportedVersions>
     <li>1.6</li>
+    <li>1.7</li>
   </supportedVersions>
   <modDependencies>
     <li>
@@ -25,17 +26,19 @@ Have you ever wanted to carve your entire civilization into living rock, safe fr
 
 KEY DEFENSIVE HIGHLIGHTS:
 - Single Choke Point: Channel every enemy raid, manhunter pack, and mechanoid threat into a single grand entrance or killbox.
-- No Aerial Drop Pod Raids: The entire mountain half is sheltered under thick overhead mountain (RoofRockThick) — no drop pods crashing through your bedrooms, hospital, or rec room!
+- No Aerial Drop Pod Raids: The entire mountain is sheltered under thick overhead mountain (RoofRockThick) — no drop pods crashing through your bedrooms, hospital, or rec room!
 - Concentrated Defenses: Forget 360-degree perimeter paranoia. Focus your turrets, bunkers, and traps where it matters.
 - A Cozy Mountain to Defend: Survive in comfort under stone while chaos reigns in the wilderness.
 
 MAP GENERATION:
-- Left Half (West): Solid, impassable mountain rock with overhead mountain roof. Zero caves, zero hollow pockets, zero surprise backdoors. No special features inside the mountain (no ancient dangers, shrines, monoliths, ruins, or geysers) EXCEPT for mineable ore veins, which can still be found and spawn throughout the rock by default so your miners have resources to unearth.
-- Right Half (East): Flat open land free of obstructive mountains, hills, or lakes. All vanilla surface features generate freely: trees, fertile soil, ancient dangers, steam geysers, ruins, roads, and the Anomaly Void Monolith.
+- Choose Your Side: The mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
+- The Mountain: Solid, impassable mountain rock with overhead mountain roof. Zero caves, zero hollow pockets, zero surprise backdoors. No special features inside the mountain (no ancient dangers, shrines, monoliths, ruins, or geysers) EXCEPT for mineable ore veins, which can still be found and spawn throughout the rock by default so your miners have resources to unearth.
+- The Plains: Flat open land free of obstructive mountains, hills, or lakes. All vanilla surface features generate freely: trees, fertile soil, ancient dangers, steam geysers, ruins, roads, and the Anomaly Void Monolith.
 - Starting Colony Only: Affects only your initial colony map. All future quest maps, satellite settlements, and encounter sites generate standard vanilla terrain.
 
 CUSTOMIZABLE SETTINGS:
-- Mountain width slider (30% to 70%, default 50%).
+- Mountain side: west, east, north or south (default: west).
+- Mountain size slider (30% to 70% of the map, default 50%).
 - Toggle mineable ore veins in the mountain (default: ON). Ore density matches a vanilla mountainous map, even on flat tiles.
 - Toggle removal of lakes on plains (default: ON).
 - Toggle flattening of hills on plains (default: ON).
@@ -50,6 +53,6 @@ GITHUB REPOSITORY:
 https://github.com/federicogiorgi/TheMoat
 Issues, discussions, and contributions are welcome!
 
-Compatible with RimWorld 1.6.
+Compatible with RimWorld 1.6 and 1.7.
   </description>
 </ModMetaData>

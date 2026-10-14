@@ -9,6 +9,7 @@ namespace TheMoat
         public const float MinMountainPercent = 0.30f;
         public const float MaxMountainPercent = 0.70f;
 
+        public MoatSide mountainSide = MoatSide.West;
         public float mountainPercent = 0.50f;
         public bool allowOresInMountain = true;
         public bool removeWaterOnPlains = true;
@@ -17,6 +18,7 @@ namespace TheMoat
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref mountainSide, "mountainSide", MoatSide.West);
             Scribe_Values.Look(ref mountainPercent, "mountainPercent", 0.50f);
             Scribe_Values.Look(ref allowOresInMountain, "allowOresInMountain", true);
             Scribe_Values.Look(ref removeWaterOnPlains, "removeWaterOnPlains", true);
@@ -31,7 +33,17 @@ namespace TheMoat
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
 
-            listing.Label(string.Format("Mountain Width: {0:P0} of the map (West side)", mountainPercent));
+            listing.Label("Mountain side:");
+            foreach (MoatSide side in Enum.GetValues(typeof(MoatSide)))
+            {
+                if (listing.RadioButton(SideLabel(side), mountainSide == side, 12f))
+                {
+                    mountainSide = side;
+                }
+            }
+            listing.Gap(12f);
+
+            listing.Label(string.Format("Mountain size: {0:P0} of the map", mountainPercent));
             mountainPercent = listing.Slider(mountainPercent, MinMountainPercent, MaxMountainPercent);
             listing.Gap(12f);
 
@@ -45,19 +57,20 @@ namespace TheMoat
             listing.CheckboxLabeled(
                 "Remove lakes and water on the plains",
                 ref removeWaterOnPlains,
-                "If enabled, any lakes, ponds, or rivers on the eastern plains are converted into dry soil based on local fertility."
+                "If enabled, any lakes, ponds, or rivers on the plains are converted into dry soil based on local fertility."
             );
             listing.Gap(8f);
 
             listing.CheckboxLabeled(
                 "Flatten hills on the plains",
                 ref flattenHillsOnPlains,
-                "If enabled, elevation on the eastern plains is kept flat so no rock walls or hill slopes generate on the open side."
+                "If enabled, elevation on the plains is kept flat so no rock walls or hill slopes generate on the open side."
             );
             listing.Gap(16f);
 
             if (listing.ButtonText("Reset to Defaults"))
             {
+                mountainSide = MoatSide.West;
                 mountainPercent = 0.50f;
                 allowOresInMountain = true;
                 removeWaterOnPlains = true;
@@ -65,6 +78,17 @@ namespace TheMoat
             }
 
             listing.End();
+        }
+
+        private static string SideLabel(MoatSide side)
+        {
+            switch (side)
+            {
+                case MoatSide.East: return "East (right)";
+                case MoatSide.North: return "North (top)";
+                case MoatSide.South: return "South (bottom)";
+                default: return "West (left)";
+            }
         }
     }
 }

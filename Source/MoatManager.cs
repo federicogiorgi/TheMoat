@@ -47,13 +47,6 @@ namespace TheMoat
             return true;
         }
 
-        public static int GetSplitX(Map map)
-        {
-            float percent = MoatMod.Settings != null ? MoatMod.Settings.mountainPercent : 0.50f;
-            percent = Mathf.Clamp(percent, MoatSettings.MinMountainPercent, MoatSettings.MaxMountainPercent);
-            return (int)(map.Size.x * percent);
-        }
-
         public static ThingDef GetRockDefForMap(Map map, IntVec3 c)
         {
             // 1. Try vanilla RockDefAt while map gen noise grids are active
@@ -100,7 +93,7 @@ namespace TheMoat
             try
             {
                 cachedTileRock = null; // Reset cache for new map
-                int splitX = GetSplitX(map);
+                MoatLayout layout = MoatLayout.For(map);
                 MapGenFloatGrid elev = MapGenerator.Elevation;
                 MapGenFloatGrid caves = MapGenerator.Caves;
 
@@ -110,15 +103,15 @@ namespace TheMoat
                     {
                         IntVec3 c = new IntVec3(x, 0, z);
 
-                        if (x < splitX)
+                        if (layout.IsMountain(c))
                         {
-                            // Left: Deep impassable mountain elevation, strictly zero caves
+                            // Mountain: Deep impassable mountain elevation, strictly zero caves
                             if (elev != null) elev[c] = 2.0f;
                             if (caves != null) caves[c] = 0f;
                         }
                         else
                         {
-                            // Right: Flat elevation, zero caves
+                            // Plains: Flat elevation, zero caves
                             if (elev != null && MoatMod.Settings.flattenHillsOnPlains)
                             {
                                 elev[c] = 0.30f;
@@ -140,13 +133,14 @@ namespace TheMoat
 
             try
             {
-                int splitX = GetSplitX(map);
+                MoatLayout layout = MoatLayout.For(map);
 
                 for (int z = 0; z < map.Size.z; z++)
                 {
-                    for (int x = 0; x < splitX; x++)
+                    for (int x = 0; x < map.Size.x; x++)
                     {
                         IntVec3 c = new IntVec3(x, 0, z);
+                        if (!layout.IsMountain(c)) continue;
 
                         // 1. Thick rock roof across the entire mountain
                         map.roofGrid.SetRoof(c, RoofDefOf.RoofRockThick);
@@ -172,12 +166,13 @@ namespace TheMoat
                     }
                 }
 
-                // Right side: ensure no mountains or thick roofs
+                // Plains: ensure no mountains or thick roofs
                 for (int z = 0; z < map.Size.z; z++)
                 {
-                    for (int x = splitX; x < map.Size.x; x++)
+                    for (int x = 0; x < map.Size.x; x++)
                     {
                         IntVec3 c = new IntVec3(x, 0, z);
+                        if (layout.IsMountain(c)) continue;
 
                         // Clear any mountain roofs
                         RoofDef r = map.roofGrid.RoofAt(c);
@@ -214,12 +209,12 @@ namespace TheMoat
 
             try
             {
-                int splitX = GetSplitX(map);
-                int maxCenterX = splitX - OreLumpEdgeMargin;
-                if (maxCenterX <= 0) return;
+                MoatLayout layout = MoatLayout.For(map);
+                int maxCenterDepth = layout.thickness - OreLumpEdgeMargin;
+                if (maxCenterDepth <= 0) return;
 
-                int targetLumps = Mathf.RoundToInt(splitX * map.Size.z / 10000f * OreLumpsPer10kMountainCells);
-                int existingLumps = CountOreLumps(map, splitX);
+                int targetLumps = Mathf.RoundToInt(layout.MountainCellCount / 10000f * OreLumpsPer10kMountainCells);
+                int existingLumps = CountOreLumps(map, layout);
                 int lumpsToAdd = targetLumps - existingLumps;
                 if (lumpsToAdd <= 0) return;
 
@@ -229,7 +224,7 @@ namespace TheMoat
                 {
                     for (int attempt = 0; attempt < 50; attempt++)
                     {
-                        IntVec3 c = new IntVec3(Rand.Range(0, maxCenterX), 0, Rand.Range(0, map.Size.z));
+                        IntVec3 c = layout.CellAt(Rand.Range(0, maxCenterDepth), Rand.Range(0, layout.EdgeLength));
                         Building edifice = c.GetEdifice(map);
                         if (edifice != null && edifice.def.IsNonResourceNaturalRock)
                         {
@@ -248,8 +243,8 @@ namespace TheMoat
             }
         }
 
-        // Counts connected groups of ore cells (4-way) on the mountain side
-        private static int CountOreLumps(Map map, int splitX)
+        // Counts connected groups of ore cells (4-way) in the mountain
+        private static int CountOreLumps(Map map, MoatLayout layout)
         {
             int sizeX = map.Size.x;
             int sizeZ = map.Size.z;
@@ -259,20 +254,21 @@ namespace TheMoat
 
             for (int z = 0; z < sizeZ; z++)
             {
-                for (int x = 0; x < splitX; x++)
+                for (int x = 0; x < sizeX; x++)
                 {
-                    if (visited[z * sizeX + x] || !IsOreAt(map, new IntVec3(x, 0, z))) continue;
+                    IntVec3 c = new IntVec3(x, 0, z);
+                    if (visited[z * sizeX + x] || !layout.IsMountain(c) || !IsOreAt(map, c)) continue;
 
                     lumps++;
                     visited[z * sizeX + x] = true;
-                    stack.Push(new IntVec3(x, 0, z));
+                    stack.Push(c);
                     while (stack.Count > 0)
                     {
                         IntVec3 cur = stack.Pop();
                         for (int d = 0; d < 4; d++)
                         {
                             IntVec3 n = cur + GenAdj.CardinalDirections[d];
-                            if (n.x < 0 || n.x >= splitX || n.z < 0 || n.z >= sizeZ) continue;
+                            if (!n.InBounds(map) || !layout.IsMountain(n)) continue;
                             int idx = n.z * sizeX + n.x;
                             if (visited[idx] || !IsOreAt(map, n)) continue;
                             visited[idx] = true;
@@ -301,14 +297,18 @@ namespace TheMoat
         public static bool TryFindAncientMechsCell(GenStep_Scatterer scatterer, Map map, out IntVec3 result)
         {
             result = IntVec3.Invalid;
-            int splitX = GetSplitX(map);
+            MoatLayout layout = MoatLayout.For(map);
 
             List<IntVec3> candidates = new List<IntVec3>();
             for (int z = MechEdgeMargin; z < map.Size.z - MechEdgeMargin; z++)
             {
-                for (int x = splitX + MechEdgeMargin; x < map.Size.x - MechEdgeMargin; x++)
+                for (int x = MechEdgeMargin; x < map.Size.x - MechEdgeMargin; x++)
                 {
-                    candidates.Add(new IntVec3(x, 0, z));
+                    IntVec3 c = new IntVec3(x, 0, z);
+                    if (layout.DistanceFromMountain(c) >= MechEdgeMargin)
+                    {
+                        candidates.Add(c);
+                    }
                 }
             }
             candidates.Shuffle();
@@ -387,20 +387,21 @@ namespace TheMoat
 
             try
             {
-                int splitX = GetSplitX(map);
+                MoatLayout layout = MoatLayout.For(map);
 
-                // Left side: vanilla already lays the matching rock floor under each rock type
+                // Mountain: vanilla already lays the matching rock floor under each rock type
 
-                // Right side: replace any water/marsh with dry land
+                // Plains: replace any water/marsh with dry land
                 if (MoatMod.Settings.removeWaterOnPlains)
                 {
                     MapGenFloatGrid fertGrid = MapGenerator.Fertility;
 
                     for (int z = 0; z < map.Size.z; z++)
                     {
-                        for (int x = splitX; x < map.Size.x; x++)
+                        for (int x = 0; x < map.Size.x; x++)
                         {
                             IntVec3 c = new IntVec3(x, 0, z);
+                            if (layout.IsMountain(c)) continue;
                             TerrainDef currentTerrain = map.terrainGrid.TerrainAt(c);
 
                             if (IsWaterOrWetTerrain(currentTerrain))
@@ -480,10 +481,10 @@ namespace TheMoat
 
             try
             {
-                int splitX = GetSplitX(map);
+                MoatLayout layout = MoatLayout.For(map);
                 IntVec3 startSpot = MapGenerator.PlayerStartSpot;
 
-                if (startSpot.x < splitX + 5 || !startSpot.Standable(map) || map.roofGrid.Roofed(startSpot))
+                if (layout.DistanceFromMountain(startSpot) < 5 || !startSpot.Standable(map) || map.roofGrid.Roofed(startSpot))
                 {
                     IntVec3 bestSpot = CellFinderLoose.TryFindCentralCell(
                         map,
@@ -491,7 +492,7 @@ namespace TheMoat
                         5,
                         delegate(IntVec3 c)
                         {
-                            return c.x >= splitX + 5 && c.Standable(map) && map.roofGrid.RoofAt(c) == null;
+                            return layout.DistanceFromMountain(c) >= 5 && c.Standable(map) && map.roofGrid.RoofAt(c) == null;
                         },
                         true
                     );
@@ -521,7 +522,8 @@ namespace TheMoat
                     comp.hasGeneratedStartingBase = true;
                 }
 
-                Log.Message("[The Moat] Starting base generation complete. The western " + MoatMod.Settings.mountainPercent.ToString("P0") + " is protected by an impassable mountain cliff!");
+                Log.Message("[The Moat] Starting base generation complete. The " + MoatMod.Settings.mountainSide.ToString().ToLowerInvariant()
+                    + " " + MoatMod.Settings.mountainPercent.ToString("P0") + " of the map is protected by an impassable mountain cliff!");
             }
             catch (Exception ex)
             {

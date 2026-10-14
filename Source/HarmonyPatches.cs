@@ -104,7 +104,7 @@ namespace TheMoat
             }
         }
 
-        // 6. Restrict General Scatterers (Monolith, Geysers, Ruins) to plains
+        // 6. Restrict General Scatterers (Monolith, Geysers, Ruins) to the plains
         [HarmonyPatch(typeof(GenStep_Scatterer), "CanScatterAt")]
         public static class Patch_Scatterer_CanScatterAt
         {
@@ -114,12 +114,12 @@ namespace TheMoat
                 {
                     if (MoatManager.IsStartingBase(map))
                     {
-                        int splitX = MoatManager.GetSplitX(map);
+                        MoatLayout layout = MoatLayout.For(map);
 
                         // If it's mineral ore veins
                         if (__instance is GenStep_ScatterLumpsMineable)
                         {
-                            if (!MoatMod.Settings.allowOresInMountain && loc.x < splitX)
+                            if (!MoatMod.Settings.allowOresInMountain && layout.IsMountain(loc))
                             {
                                 __result = false;
                                 return false;
@@ -133,8 +133,8 @@ namespace TheMoat
                             return true;
                         }
 
-                        // Special features: strictly prohibited on the western mountain half
-                        if (loc.x < splitX + 6)
+                        // Special features: strictly prohibited in the mountain and right at its foot
+                        if (layout.DistanceFromMountain(loc) < 6)
                         {
                             __result = false;
                             return false;
@@ -159,10 +159,10 @@ namespace TheMoat
                 {
                     if (MoatManager.IsStartingBase(map))
                     {
-                        int splitX = MoatManager.GetSplitX(map);
+                        MoatLayout layout = MoatLayout.For(map);
 
-                        // Shrines must spawn on the right plains
-                        if (c.x < splitX + 8 || c.x > map.Size.x - 12 || c.z < 12 || c.z > map.Size.z - 12)
+                        // Shrines must spawn on the plains, away from the mountain and the map edges
+                        if (layout.DistanceFromMountain(c) < 8 || c.x < 12 || c.x > map.Size.x - 12 || c.z < 12 || c.z > map.Size.z - 12)
                         {
                             __result = false;
                             return false;
@@ -242,14 +242,14 @@ namespace TheMoat
                 {
                     if (MoatManager.IsStartingBase(map))
                     {
-                        int splitX = MoatManager.GetSplitX(map);
-                        if (__result.x < splitX)
+                        MoatLayout layout = MoatLayout.For(map);
+                        if (layout.IsMountain(__result))
                         {
                             IntVec3 newExit;
                             bool found = CellFinder.TryFindRandomEdgeCellWith(
                                 delegate(IntVec3 c)
                                 {
-                                    return c.x >= splitX && c.Standable(map);
+                                    return !layout.IsMountain(c) && c.Standable(map);
                                 },
                                 map,
                                 CellFinder.EdgeRoadChance_Always,
