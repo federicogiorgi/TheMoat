@@ -26,6 +26,24 @@ namespace TheMoat
             }
         }
 
+        // 1b. Tile mutators (mountain, cliffs, coast, valley...) rewrite the elevation grid in a later step, which
+        // would put a second mountain on the plains and dig into ours: enforce the layout again after them
+        [HarmonyPatch(typeof(GenStep_MutatorPostElevationFertility), "Generate")]
+        public static class Patch_MutatorPostElevationFertility_Generate
+        {
+            public static void Postfix(Map map, GenStepParams parms)
+            {
+                try
+                {
+                    MoatManager.EnforceElevationAndCaves(map);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[The Moat] Error in Patch_MutatorPostElevationFertility_Generate: " + ex);
+                }
+            }
+        }
+
         // 2. Prevent Cave Generation
         [HarmonyPatch(typeof(MapGenCavesUtility), "GenerateCaves")]
         public static class Patch_MapGenCavesUtility_GenerateCaves
@@ -100,6 +118,23 @@ namespace TheMoat
                 catch (Exception ex)
                 {
                     Log.Error("[The Moat] Error in Patch_Terrain_Generate: " + ex);
+                }
+            }
+        }
+
+        // 5b. Tile mutators lay their water (coast, lakes...) after the terrain step: dry the plains again after them
+        [HarmonyPatch(typeof(GenStep_MutatorPostTerrain), "Generate")]
+        public static class Patch_MutatorPostTerrain_Generate
+        {
+            public static void Postfix(Map map, GenStepParams parms)
+            {
+                try
+                {
+                    MoatManager.CleanTerrain(map);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[The Moat] Error in Patch_MutatorPostTerrain_Generate: " + ex);
                 }
             }
         }
