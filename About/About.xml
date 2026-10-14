@@ -20,39 +20,36 @@
     <li>brrainz.harmony</li>
     <li>Ludeon.RimWorld</li>
   </loadAfter>
-  <description>A mod for players who want to build a subterranean colony, heavily relying on the supreme defensive capabilities of living under a mountain.
+  <description>Forces your starting colony map (and only that map) to generate with an impassable mountain along one side and open plains on the rest. Built for players who want a subterranean colony with one or few choke point.
 
-Have you ever wanted to carve your entire civilization into living rock, safe from aerial drop pods, while funneling every hostile raid into a single, fortified chokepoint? The Moat is built for players who love the atmosphere of being besieged inside a cozy, impenetrable mountain fortress while facing the untamed wild outside.
+DEFENSIVE HIGHLIGHTS
+- You can build your mountain base deep, with no caves, no surprise internal open spaces or ancient dangers. Ores are present normally.
+- You can design the base for a single choke point: every raid, manhunter pack and mechanoid threat comes from the plains side.
+- No drop pods through the roof: the whole mountain is covered by thick overhead mountain.
+- Concentrated defenses: no 360-degree perimeter to defend. Put your turrets, bunkers and traps at the entrance.
+- If you want full relax: combine this mod with the "no infestations" one.
 
-KEY DEFENSIVE HIGHLIGHTS:
-- Single Choke Point: Channel every enemy raid, manhunter pack, and mechanoid threat into a single grand entrance or killbox.
-- No Aerial Drop Pod Raids: The entire mountain is sheltered under thick overhead mountain (RoofRockThick) — no drop pods crashing through your bedrooms, hospital, or rec room!
-- Concentrated Defenses: Forget 360-degree perimeter paranoia. Focus your turrets, bunkers, and traps where it matters.
-- A Cozy Mountain to Defend: Survive in comfort under stone while chaos reigns in the wilderness.
+MAP GENERATION
+- Choose your side: the mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
+- The mountain: solid rock with thick overhead roof. No caves, no hollow pockets, no insect hives, no special features (ancient dangers, ruins, geysers, monolith). Only mineable ore veins, at the density of a vanilla mountainous map, even on flat tiles.
+- The plains: flat open land without hills or lakes. All vanilla surface features spawn there: trees, soil types, ancient dangers, ancient mech remains, steam geysers, ruins, roads, the Anomaly Void Monolith and wildlife.
+- Starting colony only: later settlements, quest sites, encounter maps and camps generate normal vanilla maps.
 
-MAP GENERATION:
-- Choose Your Side: The mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
-- The Mountain: Solid, impassable mountain rock with overhead mountain roof. Zero caves, zero hollow pockets, zero surprise backdoors. No special features inside the mountain (no ancient dangers, shrines, monoliths, ruins, or geysers) EXCEPT for mineable ore veins, which can still be found and spawn throughout the rock by default so your miners have resources to unearth.
-- The Plains: Flat open land free of obstructive mountains, hills, or lakes. All vanilla surface features generate freely: trees, fertile soil, ancient dangers, steam geysers, ruins, roads, and the Anomaly Void Monolith.
-- Starting Colony Only: Affects only your initial colony map. All future quest maps, satellite settlements, and encounter sites generate standard vanilla terrain.
-
-CUSTOMIZABLE SETTINGS:
+MOD SETTINGS (Options -> Mod Settings -> The Moat)
 - Mountain side: west, east, north or south (default: west).
-- Mountain size slider (30% to 70% of the map, default 50%).
-- Toggle mineable ore veins in the mountain (default: ON). Ore density matches a vanilla mountainous map, even on flat tiles.
-- Toggle removal of lakes on plains (default: ON).
-- Toggle flattening of hills on plains (default: ON).
+- Mountain size: 30% to 70% of the map (default: 50%).
+- Ore veins in the mountain (default: ON).
+- Remove lakes and water on the plains (default: ON).
+- Flatten hills on the plains (default: ON).
 
-REQUIRED MODS:
-- Harmony is REQUIRED:
-  https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077
-  (Make sure Harmony is loaded at the top of your mod list, before Core and before The Moat).
-- No other mods or DLCs are required! Fully compatible with base RimWorld as well as Biotech, Ideology, Royalty, Anomaly, and modded playthroughs.
+REQUIREMENTS
+- Harmony is required. Load it at the top of your mod list:
+https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077
+- No DLC required. Works with Royalty, Ideology, Biotech, Anomaly and Odyssey.
+- Compatible with RimWorld 1.6 and 1.7.
 
-GITHUB REPOSITORY:
+SOURCE CODE
 https://github.com/federicogiorgi/TheMoat
-Issues, discussions, and contributions are welcome!
-
-Compatible with RimWorld 1.6 and 1.7.
+Issues and contributions are welcome.
   </description>
 </ModMetaData>
