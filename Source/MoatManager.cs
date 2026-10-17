@@ -19,20 +19,16 @@ namespace TheMoat
         {
             if (map == null) return false;
 
-            // 1. Only during initial game creation (Find.GameInitData is null during all normal gameplay)
+            // GameInitData only exists while a new game is being set up
             if (Find.GameInitData == null) return false;
 
-            // 2. Check persistent component flag (saved and loaded with the save file)
             MoatGameComponent comp = Current.Game != null ? Current.Game.GetComponent<MoatGameComponent>() : null;
             if (comp != null && comp.hasGeneratedStartingBase) return false;
 
-            // 3. Must be player faction home
             if (map.ParentFaction != Faction.OfPlayer && !map.IsPlayerHome) return false;
 
-            // 4. Must match the exact starting tile chosen on the world map during game setup
             if (map.Tile != Find.GameInitData.startingTile) return false;
 
-            // 5. Must be the first player home map (no other colony map already exists)
             if (Find.Maps != null)
             {
                 for (int i = 0; i < Find.Maps.Count; i++)
@@ -50,7 +46,6 @@ namespace TheMoat
 
         public static ThingDef GetRockDefForMap(Map map, IntVec3 c)
         {
-            // 1. Try vanilla RockDefAt while map gen noise grids are active
             try
             {
                 ThingDef rock = GenStep_RocksFromGrid.RockDefAt(c);
@@ -58,13 +53,11 @@ namespace TheMoat
             }
             catch
             {
-                // Working data (RockNoises) has already been cleared or is not initialized
+                // Rock noise grids are gone outside map generation
             }
 
-            // 2. Try the cached rock def for this tile
             if (cachedTileRock != null) return cachedTileRock;
 
-            // 3. Try to query the world's natural rock types for this tile
             if (map != null && Find.World != null)
             {
                 try
@@ -83,7 +76,6 @@ namespace TheMoat
                 }
             }
 
-            // 4. Fallback to any natural rock def in database
             return GetFallbackRockDef();
         }
 
@@ -93,7 +85,7 @@ namespace TheMoat
 
             try
             {
-                cachedTileRock = null; // Reset cache for new map
+                cachedTileRock = null;
                 MoatLayout layout = MoatLayout.For(map);
                 MapGenFloatGrid elev = MapGenerator.Elevation;
                 MapGenFloatGrid caves = MapGenerator.Caves;
@@ -106,13 +98,11 @@ namespace TheMoat
 
                         if (layout.IsMountain(c))
                         {
-                            // Mountain: Deep impassable mountain elevation, strictly zero caves
                             if (elev != null) elev[c] = 2.0f;
                             if (caves != null) caves[c] = 0f;
                         }
                         else
                         {
-                            // Plains: Flat elevation, zero caves
                             if (elev != null && MoatMod.Settings.flattenHillsOnPlains)
                             {
                                 elev[c] = 0.30f;
@@ -186,10 +176,8 @@ namespace TheMoat
                         IntVec3 c = new IntVec3(x, 0, z);
                         if (!layout.IsMountain(c)) continue;
 
-                        // 1. Thick rock roof across the entire mountain
                         map.roofGrid.SetRoof(c, RoofDefOf.RoofRockThick);
 
-                        // 2. Solid rock wall
                         Building edifice = c.GetEdifice(map);
                         bool isNaturalRock = edifice != null && edifice.def != null && edifice.def.building != null && edifice.def.building.isNaturalRock;
                         bool isMineableOre = isNaturalRock && edifice.def.building.isResourceRock;
@@ -213,7 +201,7 @@ namespace TheMoat
                     }
                 }
 
-                // Plains: ensure no mountains or thick roofs
+                // Plains: no rock and no mountain roof
                 for (int z = 0; z < map.Size.z; z++)
                 {
                     for (int x = 0; x < map.Size.x; x++)
@@ -221,14 +209,12 @@ namespace TheMoat
                         IntVec3 c = new IntVec3(x, 0, z);
                         if (layout.IsMountain(c)) continue;
 
-                        // Clear any mountain roofs
                         RoofDef r = map.roofGrid.RoofAt(c);
                         if (r == RoofDefOf.RoofRockThick || r == RoofDefOf.RoofRockThin)
                         {
                             map.roofGrid.SetRoof(c, null);
                         }
 
-                        // Remove any natural rock walls on the plains
                         Building edifice = c.GetEdifice(map);
                         if (edifice != null && edifice.def != null && edifice.def.building != null && edifice.def.building.isNaturalRock)
                         {
@@ -563,15 +549,14 @@ namespace TheMoat
 
             try
             {
-                // Mark as generated in GameComponent
                 MoatGameComponent comp = Current.Game != null ? Current.Game.GetComponent<MoatGameComponent>() : null;
                 if (comp != null)
                 {
                     comp.hasGeneratedStartingBase = true;
                 }
 
-                Log.Message("[The Moat] Starting base generation complete. The " + MoatMod.Settings.mountainSide.ToString().ToLowerInvariant()
-                    + " " + MoatMod.Settings.mountainPercent.ToString("P0") + " of the map is protected by an impassable mountain cliff!");
+                Log.Message("[The Moat] Starting map generated: mountain on the " + MoatMod.Settings.mountainSide.ToString().ToLowerInvariant()
+                    + " side, " + MoatMod.Settings.mountainPercent.ToString("P0") + " of the map.");
             }
             catch (Exception ex)
             {

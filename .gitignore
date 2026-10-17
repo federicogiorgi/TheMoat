@@ -5,7 +5,7 @@
 Thumbs.db
 *.DS_Store
 
-# Build artifacts (keeping Assemblies/*.dll for RimWorld mod distribution)
+# Build output (the DLLs in 1.6/ and 1.7/ are committed: the game loads them)
 *.pdb
 *.tmp
 *.log

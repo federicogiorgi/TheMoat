@@ -18,8 +18,8 @@ namespace TheMoat
             {
                 Harmony harmony = new Harmony("Keldarton.TheMoat");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
-                Log.Message("[The Moat] Initialized successfully. Starting colony maps will generate with a " + Settings.mountainPercent.ToString("P0")
-                    + " impassable mountain barrier on the " + Settings.mountainSide.ToString().ToLowerInvariant() + " side.");
+                Log.Message("[The Moat] Loaded. Mountain on the " + Settings.mountainSide.ToString().ToLowerInvariant() + " side, "
+                    + Settings.mountainPercent.ToString("P0") + " of the map.");
             }
             catch (Exception ex)
             {

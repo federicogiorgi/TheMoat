@@ -9,7 +9,7 @@ namespace TheMoat
     [StaticConstructorOnStartup]
     public static class HarmonyPatches
     {
-        // 1. Elevation & Caves Grid Postfix
+        // Mountain and plains elevation, no caves
         [HarmonyPatch(typeof(GenStep_ElevationFertility), "Generate")]
         public static class Patch_ElevationFertility_Generate
         {
@@ -26,7 +26,7 @@ namespace TheMoat
             }
         }
 
-        // 1b. Tile mutators (mountain, cliffs, coast, valley...) rewrite the elevation grid in a later step, which
+        // Tile mutators (mountain, cliffs, coast, valley...) rewrite the elevation grid in a later step, which
         // would put a second mountain on the plains and dig into ours: enforce the layout again after them
         [HarmonyPatch(typeof(GenStep_MutatorPostElevationFertility), "Generate")]
         public static class Patch_MutatorPostElevationFertility_Generate
@@ -45,7 +45,7 @@ namespace TheMoat
             }
         }
 
-        // 2. Prevent vanilla cave generation (the optional mountain caves are dug by MoatManager.GenerateMountainCaves)
+        // No vanilla caves on the starting map; the optional mountain caves come from MoatManager.GenerateMountainCaves
         [HarmonyPatch(typeof(MapGenCavesUtility), "GenerateCaves")]
         public static class Patch_MapGenCavesUtility_GenerateCaves
         {
@@ -66,7 +66,6 @@ namespace TheMoat
             }
         }
 
-        // 3. Prevent Cave Hives
         [HarmonyPatch(typeof(GenStep_CaveHives), "Generate")]
         public static class Patch_CaveHives_Generate
         {
@@ -87,7 +86,6 @@ namespace TheMoat
             }
         }
 
-        // 4. Rock Walls & Overhead Mountain Roofs
         [HarmonyPatch(typeof(GenStep_RocksFromGrid), "Generate")]
         public static class Patch_RocksFromGrid_Generate
         {
@@ -106,7 +104,6 @@ namespace TheMoat
             }
         }
 
-        // 5. Natural Terrain & Water Removal
         [HarmonyPatch(typeof(GenStep_Terrain), "Generate")]
         public static class Patch_Terrain_Generate
         {
@@ -123,7 +120,7 @@ namespace TheMoat
             }
         }
 
-        // 5b. Tile mutators lay their water (coast, lakes...) after the terrain step: dry the plains again after them
+        // Tile mutators lay their water (coast, lakes...) after the terrain step: dry the plains again after them
         [HarmonyPatch(typeof(GenStep_MutatorPostTerrain), "Generate")]
         public static class Patch_MutatorPostTerrain_Generate
         {
@@ -140,7 +137,7 @@ namespace TheMoat
             }
         }
 
-        // 6. Restrict General Scatterers (Monolith, Geysers, Ruins) to the plains
+        // Keep scattered features (monolith, geysers, ruins...) on the plains
         [HarmonyPatch(typeof(GenStep_Scatterer), "CanScatterAt")]
         public static class Patch_Scatterer_CanScatterAt
         {
@@ -152,7 +149,6 @@ namespace TheMoat
                     {
                         MoatLayout layout = MoatLayout.For(map);
 
-                        // If it's mineral ore veins
                         if (__instance is GenStep_ScatterLumpsMineable)
                         {
                             if (!MoatMod.Settings.allowOresInMountain && layout.IsMountain(loc))
@@ -163,13 +159,12 @@ namespace TheMoat
                             return true;
                         }
 
-                        // Handled by dedicated shrine patch
+                        // See the shrine patch below
                         if (__instance is GenStep_ScatterShrines)
                         {
                             return true;
                         }
 
-                        // Special features: strictly prohibited in the mountain and right at its foot
                         if (layout.DistanceFromMountain(loc) < 6)
                         {
                             __result = false;
@@ -185,7 +180,7 @@ namespace TheMoat
             }
         }
 
-        // 7. Ancient Dangers: allow placement on flat open plains without requiring natural rock
+        // Ancient dangers normally need natural rock next to them, which the plains don't have
         [HarmonyPatch(typeof(GenStep_ScatterShrines), "CanScatterAt")]
         public static class Patch_ScatterShrines_CanScatterAt
         {
@@ -197,21 +192,18 @@ namespace TheMoat
                     {
                         MoatLayout layout = MoatLayout.For(map);
 
-                        // Shrines must spawn on the plains, away from the mountain and the map edges
                         if (layout.DistanceFromMountain(c) < 8 || c.x < 12 || c.x > map.Size.x - 12 || c.z < 12 || c.z > map.Size.z - 12)
                         {
                             __result = false;
                             return false;
                         }
 
-                        // Must be standable and unroofed
                         if (!c.Standable(map) || map.roofGrid.Roofed(c))
                         {
                             __result = false;
                             return false;
                         }
 
-                        // Bypass the vanilla requirement of needing adjacent natural rock
                         __result = true;
                         return false;
                     }
@@ -224,7 +216,7 @@ namespace TheMoat
             }
         }
 
-        // 7b. Ancient mech remains (Ideology): find a spot on the plains, see MoatManager.TryFindAncientMechsCell
+        // Ancient mech remains (Ideology): find a spot on the plains, see MoatManager.TryFindAncientMechsCell
         [HarmonyPatch(typeof(GenStep_Scatterer), "TryFindScatterCell")]
         public static class Patch_Scatterer_TryFindScatterCell
         {
@@ -251,7 +243,6 @@ namespace TheMoat
             }
         }
 
-        // 8. Player Start Spot
         [HarmonyPatch(typeof(GenStep_FindPlayerStartSpot), "Generate")]
         public static class Patch_FindPlayerStartSpot_Generate
         {
@@ -268,7 +259,7 @@ namespace TheMoat
             }
         }
 
-        // 9. Road Exit Point Redirection
+        // Roads must leave the map through the plains
         [HarmonyPatch(typeof(GenStep_Roads), "FindRoadExitCell")]
         public static class Patch_Roads_FindRoadExitCell
         {
@@ -305,7 +296,7 @@ namespace TheMoat
             }
         }
 
-        // 10. Road Bulldoze Protection for Mountain
+        // Roads clear rock along their path, so restore the mountain afterwards
         [HarmonyPatch(typeof(GenStep_Roads), "Generate")]
         public static class Patch_Roads_Generate
         {
@@ -325,7 +316,6 @@ namespace TheMoat
             }
         }
 
-        // 11. Map Generation Finalizer
         [HarmonyPatch(typeof(MapGenerator), "GenerateMap")]
         public static class Patch_MapGenerator_GenerateMap
         {

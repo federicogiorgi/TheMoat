@@ -5,131 +5,61 @@
 </p>
 
 <p align="center">
-  <strong>Forces your starting colony map (and only that map) to generate with an impassable mountain along one side and open plains on the rest.</strong>
-</p>
-
-<p align="center">
   <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538"><img src="https://img.shields.io/badge/Steam%20Workshop-3813355538-blue?logo=steam" alt="Steam Workshop"></a>
   <img src="https://img.shields.io/badge/RimWorld-1.6%20%7C%201.7-brightgreen" alt="RimWorld Version">
   <img src="https://img.shields.io/badge/Author-Keldarton-orange" alt="Author">
-  <a href="https://github.com/federicogiorgi/TheMoat"><img src="https://img.shields.io/badge/GitHub-federicogiorgi%2FTheMoat-black?logo=github" alt="GitHub Repo"></a>
 </p>
 
----
+A RimWorld mod that forces your starting colony map (and only that map) to generate with an impassable mountain along one side and open plains on the rest. Built for players who want a subterranean colony with one or a few choke points.
 
-## The Vision: A Cozy Mountain to Defend
+## Defensive highlights
 
-**The Moat** is designed specifically for players who want to play a subterranean colony, heavily relying on the supreme defensive capabilities of living under a mountain:
+- You can build your mountain base deep, with no caves (unless you switch them on in the mod options), no surprise internal open spaces or ancient dangers. Ores are present normally.
+- You can design the base for a single choke point: every raid, manhunter pack and mechanoid threat comes from the plains side.
+- No drop pods through the roof: the whole mountain is covered by thick overhead mountain.
+- Concentrated defenses: no 360-degree perimeter to defend. Put your turrets, bunkers and traps at the entrance.
+- If you want full relax: combine this mod with the "no infestations" one.
 
-- **Single Choke Point:** Force every raid, manhunter pack, and mechanoid swarm to funnel into a single, fortified entrance. Build your bunker, firing lines, turrets, and killboxes exactly where you want them.
-- **No Aerial Drop Pod Raids:** The entire mountain is sheltered under thick overhead mountain (`RoofRockThick`). No surprise drop pods punching through the roof into your hospital, bedrooms, or storage!
-- **Concentrated Defenses:** Forget 360-degree perimeter paranoia. Focus 100% of your firepower, walls, and traps on the entrance facing the untamed wild.
-- **The Ultimate Siege Fantasy:** Experience the thrill of being besieged inside a cozy, self-sustaining mountain stronghold while danger roams the open world outside.
-- **Full Relax:** Combine The Moat with a "no infestations" mod and nothing ever comes from inside the rock.
+## Map generation
 
----
+- Choose your side: the mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
+- The mountain: solid rock with thick overhead roof. No caves (unless you turn them on in the mod options), no hollow pockets, no insect hives, no special features (ancient dangers, ruins, geysers, monolith). Only mineable ore veins, at the density of a vanilla mountainous map, even on flat tiles.
+- The plains: flat open land without hills or lakes. All vanilla surface features spawn there: trees, soil types, ancient dangers, ancient mech remains, steam geysers, ruins, roads, the Anomaly Void Monolith and wildlife.
+- Starting colony only: later settlements, quest sites, encounter maps and camps generate normal vanilla maps.
 
-## Map Generation Layout
+## Mod settings
 
-When you generate your starting colony map, **The Moat** splits the map into two distinct worlds. The mountain sits on the **west** side by default; you can move it to the **east**, **north** or **south** side in the mod settings. The diagram shows the default layout:
+Options > Mod Settings > The Moat:
 
-```
-+-----------------------------------+-----------------------------------+
-|                                   |                                   |
-|       WEST (LEFT HALF):           |       EAST (RIGHT HALF):          |
-|                                   |                                   |
-|   - 100% Solid Mountain Rock      |   - Flat Open Plains              |
-|   - NO Caves or Hollow Spots      |   - Farmlands, Trees & Pastures   |
-|   - No Ruins/Shrines (Except Ores)|   - Geysers, Ruins & Monolith     |
-|   - Mineable Ore Veins (Config)   |   - Colonists & Pods Arrive Here  |
-|                                   |                                   |
-|             FORTRESS              |           WILDERNESS              |
-+-----------------------------------+-----------------------------------+
-                                      ^
-                                  Chokepoint
-                                   Entrance
-```
+- Mountain side: west, east, north or south (default: west).
+- Mountain size: 30% to 70% of the map (default: 50%).
+- Edge roughness: from a straight cliff line (0%, default) to a ragged mountain foot with bays and spurs (100%).
+- Caves inside the mountain (default: OFF): natural tunnels like vanilla caves, kept at least 12 cells from the plains and 8 from the map edges, so they never open a second way in. No insect hives.
+- Ore veins in the mountain (default: ON).
+- Remove lakes and water on the plains (default: ON).
+- Flatten hills on the plains (default: ON).
 
-### 1. The Mountain Fortress (west by default)
-- **100% Solid Rock Barrier:** 50% of the map (adjustable from 30% to 70%) along the chosen edge is packed solid with natural rock walls.
-- **True Overhead Mountain:** Complete `RoofRockThick` coverage preventing all overhead drop-pod insertions.
-- **Zero Caves & Hollow Pockets:** Guaranteed no hidden caverns, no insect hives waiting to be uncovered, and no secret rear exits. Cave lovers can turn on sealed caves deep inside the mountain in the settings.
-- **No Special Features (Except Ores):** Shrines, ancient dangers, steam geysers, ruins, and monoliths are strictly prohibited from spawning inside the mountain, giving you clean rock to carve your halls. The only exception is **mineable ore veins**, which can still be found and spawn throughout the rock by default so your miners have plentiful resources to unearth.
-- **Mountain-Level Ore Density:** Ore lumps are topped up to roughly the density of a vanilla mountainous map, even on flat tiles.
+## Requirements
 
-### 2. The Plains (The Untamed Wilderness)
-- **Flat Open Land:** Mountains and rocky hills are cleared away, giving you wide-open expanses for agriculture, windmills, solar arrays, and pastures.
-- **No Obstructive Lakes:** Lakes, swamps and other water are dried into arable soil matching local biome fertility.
-- **Full Vanilla Features:** Soil varieties, rich soil, wild trees, wildlife, steam geysers, ancient dangers, ancient mech remains, ruins, roads, and the Anomaly Void Monolith spawn cleanly across the plains.
-- **Safe Player Landing:** Colonists, cargo pods, and starting gear always touch down safely on the open plains.
+- [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077) is required. Load it at the top of your mod list.
+- No DLC required. Works with Royalty, Ideology, Biotech, Anomaly and Odyssey.
+- Compatible with RimWorld 1.6 and 1.7.
 
-### 3. Starting Colony Only
-- **The Moat affects ONLY your initial starting colony map.**
-- Later settlements, quest sites, encounter maps, and camps generate with completely normal vanilla terrain!
+## Installation
 
----
+From the Steam Workshop: subscribe to [The Moat](https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538) and [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077), enable both in the Mods menu with Harmony at the top, and start a new game.
 
-## Mod Settings
+Manual installation: clone this repository into `<Steam>/steamapps/common/RimWorld/Mods/TheMoat`, then enable Harmony and The Moat in the Mods menu.
 
-Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
+## Building from source
 
-- **Mountain Side:** Place the mountain on the west, east, north or south side of the map (default: **West**).
-- **Mountain Size Slider:** Adjust how much of the map the mountain covers (from 30% up to 70%, default: **50%**).
-- **Edge Roughness Slider:** Make the foot of the mountain irregular, with bays and spurs up to about 15% of the map deep (from 0% up to 100%, default: **0%**, a straight cliff line). The mountain stays solid either way.
-- **Allow Ore Veins in the Mountain:** Toggle whether mineable resources spawn inside the rock wall (default: **ON**).
-- **Caves Inside the Mountain:** Dig natural, vanilla-style tunnels in the inner mountain. At least 12 cells of solid rock separate them from the plains and 8 from the map edges, so a cave never opens a second way into your base. No insect hives spawn in them (default: **OFF**).
-- **Remove Lakes and Water on Plains:** Converts impassable water bodies into dry, buildable land (default: **ON**).
-- **Flatten Hills on Plains:** Removes minor rock formations and hills from the plains (default: **ON**).
+The same code is built for both RimWorld versions: `1.6/Assemblies` (.NET Framework 4.7.2, Harmony 2) and `1.7/Assemblies` (.NET 10, Harmony 3). Install the [.NET 10 SDK](https://dotnet.microsoft.com/download) and run `build.bat`, or `dotnet build TheMoat.csproj -c Release`. `build.bat` also copies the game files to `RimWorld/Mods/TheMoat`.
 
----
+## Updating the Workshop item
 
-## Requirements & Compatibility
+`About/PublishedFileId.txt` holds the Workshop item ID (3813355538), so uploading from the game updates the existing item:
 
-- **[Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077)** is **REQUIRED**.  
-  Make sure Harmony is loaded at the top of your mod list (before Core and before The Moat).
-- **No DLCs or other mods required!** Works with pure vanilla RimWorld and all official DLCs (Royalty, Ideology, Biotech, Anomaly, Odyssey).
-- Compatible with RimWorld **1.6** and **1.7**.
-- Safe to add to existing games (takes effect on new games or new colony map generations).
+1. Enable Development mode in RimWorld's options.
+2. Open Mods, select The Moat, click Advanced..., then Upload to Steam Workshop.
 
----
-
-## Installation & Links
-
-- **Steam Workshop:** [Subscribe to The Moat on the Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538)
-- **GitHub Repository:** [federicogiorgi/TheMoat](https://github.com/federicogiorgi/TheMoat)
-
-### How to Install & Play
-
-1. Subscribe to [The Moat on the Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538).
-2. Ensure you are also subscribed to [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077).
-3. In RimWorld, navigate to the **Mods** menu:
-   - Enable **Harmony** (placed above Core / at the top of your mod list).
-   - Enable **The Moat**.
-4. Click **Close** to reload mods.
-5. Start a **New Game** on any world tile. Your colonists will touch down on the open plains facing the sheer mountain fortress (to their west by default)!
-
-### Manual Installation
-1. Download or clone this repository: `git clone https://github.com/federicogiorgi/TheMoat.git`
-2. Place the `TheMoat` folder into your RimWorld mods directory:
-   - Windows: `<Steam>/steamapps/common/RimWorld/Mods/TheMoat`
-3. Launch RimWorld and enable Harmony and The Moat in the Mods menu.
-
-### Building from Source
-The mod is built for both RimWorld versions from the same code: `1.6/Assemblies` (.NET Framework 4.7.2, Harmony 2) and `1.7/Assemblies` (.NET 10, Harmony 3). Install the [.NET 10 SDK](https://dotnet.microsoft.com/download) and run `build.bat` (or `dotnet build TheMoat.csproj -c Release`).
-
----
-
-## How to Update the Mod on Steam Workshop
-
-RimWorld tracks Workshop updates using [`About/PublishedFileId.txt`](About/PublishedFileId.txt) (Workshop Item ID: `3813355538`).
-
-Whenever you want to release an update:
-1. Make your code or asset changes in your local mod directory.
-2. In RimWorld, go to **Options** and make sure **Development mode** is enabled (green ✔️).
-3. Open **Mods**, select **The Moat**, and click **`[Advanced...]`**.
-4. Click **"Upload to Steam Workshop"**.
-5. RimWorld reads `PublishedFileId.txt`, recognizes that the item already exists, and pushes your changes directly as an **update** to the existing Workshop page, prompting you for changelog notes!
-
----
-
-*“Dig deep, fortify the gate, and let the rimworld break against the stone.”*
+Uploading replaces the files but not the Workshop description, which is edited on the Workshop page.
