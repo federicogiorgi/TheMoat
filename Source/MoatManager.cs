@@ -210,8 +210,6 @@ namespace TheMoat
             try
             {
                 MoatLayout layout = MoatLayout.For(map);
-                int maxCenterDepth = layout.thickness - OreLumpEdgeMargin;
-                if (maxCenterDepth <= 0) return;
 
                 int targetLumps = Mathf.RoundToInt(layout.MountainCellCount / 10000f * OreLumpsPer10kMountainCells);
                 int existingLumps = CountOreLumps(map, layout);
@@ -224,7 +222,10 @@ namespace TheMoat
                 {
                     for (int attempt = 0; attempt < 50; attempt++)
                     {
-                        IntVec3 c = layout.CellAt(Rand.Range(0, maxCenterDepth), Rand.Range(0, layout.EdgeLength));
+                        int along = Rand.Range(0, layout.EdgeLength);
+                        int maxCenterDepth = layout.MountainDepthAt(along) - OreLumpEdgeMargin;
+                        if (maxCenterDepth <= 0) continue;
+                        IntVec3 c = layout.CellAt(Rand.Range(0, maxCenterDepth), along);
                         Building edifice = c.GetEdifice(map);
                         if (edifice != null && edifice.def.IsNonResourceNaturalRock)
                         {

@@ -75,6 +75,7 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 
 - **Mountain Side:** Place the mountain on the west, east, north or south side of the map (default: **West**).
 - **Mountain Size Slider:** Adjust how much of the map the mountain covers (from 30% up to 70%, default: **50%**).
+- **Edge Roughness Slider:** Make the foot of the mountain irregular, with bays and spurs up to about 15% of the map deep (from 0% up to 100%, default: **0%**, a straight cliff line). The mountain stays solid either way.
 - **Allow Ore Veins in the Mountain:** Toggle whether mineable resources spawn inside the rock wall (default: **ON**).
 - **Remove Lakes and Water on Plains:** Converts impassable water bodies into dry, buildable land (default: **ON**).
 - **Flatten Hills on Plains:** Removes minor rock formations and hills from the plains (default: **ON**).

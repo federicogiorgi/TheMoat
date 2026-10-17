@@ -11,6 +11,7 @@ namespace TheMoat
 
         public MoatSide mountainSide = MoatSide.West;
         public float mountainPercent = 0.50f;
+        public float edgeRoughness = 0f;
         public bool allowOresInMountain = true;
         public bool removeWaterOnPlains = true;
         public bool flattenHillsOnPlains = true;
@@ -20,12 +21,14 @@ namespace TheMoat
             base.ExposeData();
             Scribe_Values.Look(ref mountainSide, "mountainSide", MoatSide.West);
             Scribe_Values.Look(ref mountainPercent, "mountainPercent", 0.50f);
+            Scribe_Values.Look(ref edgeRoughness, "edgeRoughness", 0f);
             Scribe_Values.Look(ref allowOresInMountain, "allowOresInMountain", true);
             Scribe_Values.Look(ref removeWaterOnPlains, "removeWaterOnPlains", true);
             Scribe_Values.Look(ref flattenHillsOnPlains, "flattenHillsOnPlains", true);
 
             // Older versions allowed 10-90%
             mountainPercent = Mathf.Clamp(mountainPercent, MinMountainPercent, MaxMountainPercent);
+            edgeRoughness = Mathf.Clamp01(edgeRoughness);
         }
 
         public void DoWindowContents(Rect inRect)
@@ -45,6 +48,14 @@ namespace TheMoat
 
             listing.Label(string.Format("Mountain size: {0:P0} of the map", mountainPercent));
             mountainPercent = listing.Slider(mountainPercent, MinMountainPercent, MaxMountainPercent);
+            listing.Gap(12f);
+
+            listing.Label(
+                string.Format("Edge roughness: {0:P0}", edgeRoughness),
+                -1f,
+                (TipSignal)"How irregular the foot of the mountain is. At 0% it is a straight cliff line; higher values add bays and spurs, up to about 15% of the map deep. The mountain stays solid either way."
+            );
+            edgeRoughness = listing.Slider(edgeRoughness, 0f, 1f);
             listing.Gap(12f);
 
             listing.CheckboxLabeled(
@@ -72,6 +83,7 @@ namespace TheMoat
             {
                 mountainSide = MoatSide.West;
                 mountainPercent = 0.50f;
+                edgeRoughness = 0f;
                 allowOresInMountain = true;
                 removeWaterOnPlains = true;
                 flattenHillsOnPlains = true;

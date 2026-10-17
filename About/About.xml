@@ -38,6 +38,7 @@ MAP GENERATION
 MOD SETTINGS (Options -> Mod Settings -> The Moat)
 - Mountain side: west, east, north or south (default: west).
 - Mountain size: 30% to 70% of the map (default: 50%).
+- Edge roughness: from a straight cliff line (0%, default) to a ragged mountain foot with bays and spurs (100%).
 - Ore veins in the mountain (default: ON).
 - Remove lakes and water on the plains (default: ON).
 - Flatten hills on the plains (default: ON).
