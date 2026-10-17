@@ -20,38 +20,20 @@
     <li>brrainz.harmony</li>
     <li>Ludeon.RimWorld</li>
   </loadAfter>
-  <description>Forces your starting colony map (and only that map) to generate with an impassable mountain along one side and open plains on the rest. Built for players who want a subterranean colony with one or a few choke points.
+  <description>Forces your starting colony map (and only that map) to generate with an impassable mountain along one side and open plains on the rest. Built for players who want a subterranean colony with one or a few choke points. Options are in the mod settings.
 
-DEFENSIVE HIGHLIGHTS
-- You can build your mountain base deep, with no caves (unless you switch them on in the mod options), no surprise internal open spaces or ancient dangers. Ores are present normally.
-- You can design the base for a single choke point: every raid, manhunter pack and mechanoid threat comes from the plains side.
-- No drop pods through the roof: the whole mountain is covered by thick overhead mountain.
-- Concentrated defenses: no 360-degree perimeter to defend. Put your turrets, bunkers and traps at the entrance.
-- If you want full relax: combine this mod with the "no infestations" one.
+ITALIANO
+Fa generare la mappa della colonia iniziale (e solo quella) con una montagna invalicabile su un lato e pianure aperte sul resto. Pensato per chi vuole una colonia sotterranea con uno o pochi punti di accesso. Le opzioni sono nelle impostazioni della mod.
 
-MAP GENERATION
-- Choose your side: the mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
-- The mountain: solid rock with thick overhead roof. No caves (unless you turn them on in the mod options), no hollow pockets, no insect hives, no special features (ancient dangers, ruins, geysers, monolith). Only mineable ore veins, at the density of a vanilla mountainous map, even on flat tiles.
-- The plains: flat open land without hills or lakes. All vanilla surface features spawn there: trees, soil types, ancient dangers, ancient mech remains, steam geysers, ruins, roads, the Anomaly Void Monolith and wildlife.
-- Starting colony only: later settlements, quest sites, encounter maps and camps generate normal vanilla maps.
+FRANÇAIS
+Génère la carte de votre colonie de départ (et seulement celle-ci) avec une montagne infranchissable sur un côté et des plaines ouvertes sur le reste. Conçu pour les joueurs qui veulent une colonie souterraine avec un ou quelques points d'étranglement. Les options se trouvent dans les paramètres du mod.
 
-MOD SETTINGS (Options -> Mod Settings -> The Moat)
-- Mountain side: west, east, north or south (default: west).
-- Mountain size: 30% to 70% of the map (default: 50%).
-- Edge roughness: from a straight cliff line (0%, default) to a ragged mountain foot with bays and spurs (100%).
-- Caves inside the mountain (default: OFF): natural tunnels like vanilla caves, kept at least 12 cells from the plains and 8 from the map edges, so they never open a second way in. No insect hives.
-- Ore veins in the mountain (default: ON).
-- Remove lakes and water on the plains (default: ON).
-- Flatten hills on the plains (default: ON).
+DEUTSCH
+Erzeugt die Karte deiner Startkolonie (und nur diese) mit einem unpassierbaren Berg an einer Seite und offenen Ebenen auf dem Rest. Für Spieler, die eine unterirdische Kolonie mit einem oder wenigen Engpässen wollen. Die Optionen findest du in den Mod-Einstellungen.
 
-REQUIREMENTS
-- Harmony is required. Load it at the top of your mod list:
-https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077
-- No DLC required. Works with Royalty, Ideology, Biotech, Anomaly and Odyssey.
-- Compatible with RimWorld 1.6 and 1.7.
+ESPAÑOL
+Hace que el mapa de tu colonia inicial (y solo ese mapa) se genere con una montaña infranqueable a un lado y llanuras abiertas en el resto. Pensado para quien quiere una colonia subterránea con uno o pocos puntos de estrangulamiento. Las opciones están en los ajustes del mod.
 
-SOURCE CODE
-https://github.com/federicogiorgi/TheMoat
-Issues and contributions are welcome.
+https://steamcommunity.com/sharedfiles/filedetails/?id=3813355538
   </description>
 </ModMetaData>
