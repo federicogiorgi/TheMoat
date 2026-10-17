@@ -6,6 +6,7 @@ using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Noise;
 
 namespace TheMoat
 {
@@ -127,6 +128,49 @@ namespace TheMoat
             }
         }
 
+        // Set while we run vanilla's cave digger, so the patch that blocks vanilla caves lets ours through
+        [ThreadStatic] public static bool diggingMoatCaves;
+
+        // Vanilla-style tunnels, dug only in the cave zone of the mountain (see MoatLayout.IsCaveZone)
+        public static void GenerateMountainCaves(Map map)
+        {
+            if (!IsStartingBase(map) || !MoatMod.Settings.cavesInMountain) return;
+
+            try
+            {
+                MoatLayout layout = MoatLayout.For(map);
+                MapGenFloatGrid elevation = MapGenerator.Elevation;
+                if (elevation == null || MapGenerator.Caves == null) return;
+
+                // Same tunnel shape as the vanilla Caves landmark
+                ModuleBase directionNoise = new Perlin(0.00205, 2.0, 0.5, 4, Rand.Int, QualityMode.Medium);
+                MapGenCavesUtility.CaveGenParms parms = MapGenCavesUtility.CaveGenParms.Default;
+                parms.branchChance = 0.02f;
+                parms.allowBranchingAfterThisManyCells = 10;
+
+                diggingMoatCaves = true;
+                try
+                {
+                    MapGenCavesUtility.GenerateCaves(map, new BoolGrid(map), new List<IntVec3>(), directionNoise, parms,
+                        c => c.InBounds(map) && elevation[c] > 0.7f && layout.IsCaveZone(c));
+                }
+                finally
+                {
+                    diggingMoatCaves = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[The Moat] Error in GenerateMountainCaves: " + ex);
+            }
+        }
+
+        private static bool IsCaveAt(IntVec3 c)
+        {
+            MapGenFloatGrid caves = MapGenerator.Caves;
+            return caves != null && caves[c] > 0f;
+        }
+
         public static void EnforceRocksAndRoofs(Map map)
         {
             if (!IsStartingBase(map)) return;
@@ -149,6 +193,9 @@ namespace TheMoat
                         Building edifice = c.GetEdifice(map);
                         bool isNaturalRock = edifice != null && edifice.def != null && edifice.def.building != null && edifice.def.building.isNaturalRock;
                         bool isMineableOre = isNaturalRock && edifice.def.building.isResourceRock;
+
+                        // Leave the tunnels open (only ever dug when caves are enabled)
+                        if (!isNaturalRock && IsCaveAt(c)) continue;
 
                         if (!isNaturalRock || (!MoatMod.Settings.allowOresInMountain && isMineableOre))
                         {

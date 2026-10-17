@@ -23,6 +23,9 @@ namespace TheMoat
         private const float MinPlainsShare = 0.15f;
         // DistanceFromMountain looks this far sideways, so a spur next door counts as close
         private const int NearEdgeRadius = 10;
+        // Solid rock kept between caves and the plains / the map edges
+        public const int CaveBufferFromPlains = 12;
+        public const int CaveBufferFromMapEdge = 8;
 
         public MoatSide side;
         public int thickness;
@@ -30,6 +33,7 @@ namespace TheMoat
         public int sizeZ;
         private int[] edgeDepth;
         private int[] nearEdgeDepth;
+        private int[] caveDepth;
 
         // Per thread: Map Preview generates its previews off the main thread
         [ThreadStatic] private static Map cachedMap;
@@ -79,6 +83,7 @@ namespace TheMoat
             int length = EdgeLength;
             edgeDepth = new int[length];
             nearEdgeDepth = new int[length];
+            caveDepth = new int[length];
 
             float amplitude = roughness * MaxRoughnessAmplitude * DepthAxisLength;
             float[] profile = amplitude > 0f ? MoatEdgeNoise.Profile(length, seed) : null;
@@ -98,6 +103,14 @@ namespace TheMoat
                     deepest = Math.Max(deepest, edgeDepth[b]);
                 }
                 nearEdgeDepth[a] = deepest;
+
+                // Caves stop short of the shallowest edge nearby, so a bay to the side keeps its buffer too
+                int shallowest = int.MaxValue;
+                for (int b = Math.Max(0, a - CaveBufferFromPlains); b <= Math.Min(length - 1, a + CaveBufferFromPlains); b++)
+                {
+                    shallowest = Math.Min(shallowest, edgeDepth[b]);
+                }
+                caveDepth[a] = shallowest - CaveBufferFromPlains;
             }
         }
 
@@ -151,6 +164,17 @@ namespace TheMoat
         public bool IsMountain(IntVec3 c)
         {
             return Depth(c) < MountainDepthAt(Along(c));
+        }
+
+        // Where caves may be dug: deep enough in the mountain and away from every map edge
+        public bool IsCaveZone(IntVec3 c)
+        {
+            if (c.x < CaveBufferFromMapEdge || c.z < CaveBufferFromMapEdge
+                || c.x >= sizeX - CaveBufferFromMapEdge || c.z >= sizeZ - CaveBufferFromMapEdge)
+            {
+                return false;
+            }
+            return Depth(c) < caveDepth[Mathf.Clamp(Along(c), 0, caveDepth.Length - 1)];
         }
 
         // How far out on the plains c is from the foot of the mountain, counting spurs a few cells to the side;

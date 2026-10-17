@@ -13,6 +13,7 @@ namespace TheMoat
         public float mountainPercent = 0.50f;
         public float edgeRoughness = 0f;
         public bool allowOresInMountain = true;
+        public bool cavesInMountain = false;
         public bool removeWaterOnPlains = true;
         public bool flattenHillsOnPlains = true;
 
@@ -23,6 +24,7 @@ namespace TheMoat
             Scribe_Values.Look(ref mountainPercent, "mountainPercent", 0.50f);
             Scribe_Values.Look(ref edgeRoughness, "edgeRoughness", 0f);
             Scribe_Values.Look(ref allowOresInMountain, "allowOresInMountain", true);
+            Scribe_Values.Look(ref cavesInMountain, "cavesInMountain", false);
             Scribe_Values.Look(ref removeWaterOnPlains, "removeWaterOnPlains", true);
             Scribe_Values.Look(ref flattenHillsOnPlains, "flattenHillsOnPlains", true);
 
@@ -66,6 +68,15 @@ namespace TheMoat
             listing.Gap(8f);
 
             listing.CheckboxLabeled(
+                "Caves inside the mountain",
+                ref cavesInMountain,
+                "If enabled, natural tunnels like vanilla caves are dug in the inner mountain. At least "
+                    + MoatLayout.CaveBufferFromPlains + " cells of solid rock separate them from the plains and "
+                    + MoatLayout.CaveBufferFromMapEdge + " from the map edges, so a cave never opens a second way into your base. No insect hives spawn in them."
+            );
+            listing.Gap(8f);
+
+            listing.CheckboxLabeled(
                 "Remove lakes and water on the plains",
                 ref removeWaterOnPlains,
                 "If enabled, any lakes, ponds, or rivers on the plains are converted into dry soil based on local fertility."
@@ -85,6 +96,7 @@ namespace TheMoat
                 mountainPercent = 0.50f;
                 edgeRoughness = 0f;
                 allowOresInMountain = true;
+                cavesInMountain = false;
                 removeWaterOnPlains = true;
                 flattenHillsOnPlains = true;
             }

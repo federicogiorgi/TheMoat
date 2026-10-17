@@ -53,7 +53,7 @@ When you generate your starting colony map, **The Moat** splits the map into two
 ### 1. The Mountain Fortress (west by default)
 - **100% Solid Rock Barrier:** 50% of the map (adjustable from 30% to 70%) along the chosen edge is packed solid with natural rock walls.
 - **True Overhead Mountain:** Complete `RoofRockThick` coverage preventing all overhead drop-pod insertions.
-- **Zero Caves & Hollow Pockets:** Guaranteed no hidden caverns, no insect hives waiting to be uncovered, and no secret rear exits.
+- **Zero Caves & Hollow Pockets:** Guaranteed no hidden caverns, no insect hives waiting to be uncovered, and no secret rear exits. Cave lovers can turn on sealed caves deep inside the mountain in the settings.
 - **No Special Features (Except Ores):** Shrines, ancient dangers, steam geysers, ruins, and monoliths are strictly prohibited from spawning inside the mountain, giving you clean rock to carve your halls. The only exception is **mineable ore veins**, which can still be found and spawn throughout the rock by default so your miners have plentiful resources to unearth.
 - **Mountain-Level Ore Density:** Ore lumps are topped up to roughly the density of a vanilla mountainous map, even on flat tiles.
 
@@ -77,6 +77,7 @@ Customizable via **Options &rarr; Mod Settings &rarr; The Moat**:
 - **Mountain Size Slider:** Adjust how much of the map the mountain covers (from 30% up to 70%, default: **50%**).
 - **Edge Roughness Slider:** Make the foot of the mountain irregular, with bays and spurs up to about 15% of the map deep (from 0% up to 100%, default: **0%**, a straight cliff line). The mountain stays solid either way.
 - **Allow Ore Veins in the Mountain:** Toggle whether mineable resources spawn inside the rock wall (default: **ON**).
+- **Caves Inside the Mountain:** Dig natural, vanilla-style tunnels in the inner mountain. At least 12 cells of solid rock separate them from the plains and 8 from the map edges, so a cave never opens a second way into your base. No insect hives spawn in them (default: **OFF**).
 - **Remove Lakes and Water on Plains:** Converts impassable water bodies into dry, buildable land (default: **ON**).
 - **Flatten Hills on Plains:** Removes minor rock formations and hills from the plains (default: **ON**).
 

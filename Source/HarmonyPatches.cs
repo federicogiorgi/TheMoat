@@ -36,6 +36,7 @@ namespace TheMoat
                 try
                 {
                     MoatManager.EnforceElevationAndCaves(map);
+                    MoatManager.GenerateMountainCaves(map);
                 }
                 catch (Exception ex)
                 {
@@ -44,7 +45,7 @@ namespace TheMoat
             }
         }
 
-        // 2. Prevent Cave Generation
+        // 2. Prevent vanilla cave generation (the optional mountain caves are dug by MoatManager.GenerateMountainCaves)
         [HarmonyPatch(typeof(MapGenCavesUtility), "GenerateCaves")]
         public static class Patch_MapGenCavesUtility_GenerateCaves
         {
@@ -52,7 +53,7 @@ namespace TheMoat
             {
                 try
                 {
-                    if (MoatManager.IsStartingBase(map))
+                    if (MoatManager.IsStartingBase(map) && !MoatManager.diggingMoatCaves)
                     {
                         return false;
                     }
