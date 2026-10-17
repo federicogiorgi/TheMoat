@@ -38,59 +38,38 @@ namespace TheMoat
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
 
-            listing.Label("Mountain side:");
+            listing.Label("TheMoat_MountainSide".Translate());
             foreach (MoatSide side in Enum.GetValues(typeof(MoatSide)))
             {
-                if (listing.RadioButton(SideLabel(side), mountainSide == side, 12f))
+                if (listing.RadioButton(("TheMoat_Side" + side).Translate(), mountainSide == side, 12f))
                 {
                     mountainSide = side;
                 }
             }
             listing.Gap(12f);
 
-            listing.Label(string.Format("Mountain size: {0:P0} of the map", mountainPercent));
+            listing.Label("TheMoat_MountainSize".Translate(mountainPercent.ToString("P0")));
             mountainPercent = listing.Slider(mountainPercent, MinMountainPercent, MaxMountainPercent);
             listing.Gap(12f);
 
-            listing.Label(
-                string.Format("Edge roughness: {0:P0}", edgeRoughness),
-                -1f,
-                (TipSignal)"How irregular the foot of the mountain is. At 0% it is a straight cliff line; higher values add bays and spurs, up to about 15% of the map deep. The mountain stays solid either way."
-            );
+            listing.Label("TheMoat_EdgeRoughness".Translate(edgeRoughness.ToString("P0")), -1f, "TheMoat_EdgeRoughnessDesc".Translate());
             edgeRoughness = listing.Slider(edgeRoughness, 0f, 1f);
             listing.Gap(12f);
 
-            listing.CheckboxLabeled(
-                "Allow ore veins in mountain",
-                ref allowOresInMountain,
-                "If enabled, mineable ore lumps (steel, components, gold, etc.) can spawn inside the mountain. If disabled, the mountain is 100% solid natural rock."
-            );
+            listing.CheckboxLabeled("TheMoat_AllowOres".Translate(), ref allowOresInMountain, "TheMoat_AllowOresDesc".Translate());
             listing.Gap(8f);
 
-            listing.CheckboxLabeled(
-                "Caves inside the mountain",
-                ref cavesInMountain,
-                "If enabled, natural tunnels like vanilla caves are dug in the inner mountain. At least "
-                    + MoatLayout.CaveBufferFromPlains + " cells of solid rock separate them from the plains and "
-                    + MoatLayout.CaveBufferFromMapEdge + " from the map edges, so a cave never opens a second way into your base. No insect hives spawn in them."
-            );
+            listing.CheckboxLabeled("TheMoat_Caves".Translate(), ref cavesInMountain,
+                "TheMoat_CavesDesc".Translate(MoatLayout.CaveBufferFromPlains, MoatLayout.CaveBufferFromMapEdge));
             listing.Gap(8f);
 
-            listing.CheckboxLabeled(
-                "Remove lakes and water on the plains",
-                ref removeWaterOnPlains,
-                "If enabled, any lakes, ponds, or rivers on the plains are converted into dry soil based on local fertility."
-            );
+            listing.CheckboxLabeled("TheMoat_RemoveWater".Translate(), ref removeWaterOnPlains, "TheMoat_RemoveWaterDesc".Translate());
             listing.Gap(8f);
 
-            listing.CheckboxLabeled(
-                "Flatten hills on the plains",
-                ref flattenHillsOnPlains,
-                "If enabled, elevation on the plains is kept flat so no rock walls or hill slopes generate on the open side."
-            );
+            listing.CheckboxLabeled("TheMoat_FlattenHills".Translate(), ref flattenHillsOnPlains, "TheMoat_FlattenHillsDesc".Translate());
             listing.Gap(16f);
 
-            if (listing.ButtonText("Reset to Defaults"))
+            if (listing.ButtonText("TheMoat_ResetDefaults".Translate()))
             {
                 mountainSide = MoatSide.West;
                 mountainPercent = 0.50f;
@@ -102,17 +81,6 @@ namespace TheMoat
             }
 
             listing.End();
-        }
-
-        private static string SideLabel(MoatSide side)
-        {
-            switch (side)
-            {
-                case MoatSide.East: return "East (right)";
-                case MoatSide.North: return "North (top)";
-                case MoatSide.South: return "South (bottom)";
-                default: return "West (left)";
-            }
         }
     }
 }

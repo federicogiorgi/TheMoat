@@ -39,6 +39,8 @@ Options > Mod Settings > The Moat:
 - Remove lakes and water on the plains (default: ON).
 - Flatten hills on the plains (default: ON).
 
+The settings are translated into Italian, French, German and Spanish (`Languages/`); other languages show English.
+
 ## Requirements
 
 - [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077) is required. Load it at the top of your mod list.

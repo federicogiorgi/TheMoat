@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <TheMoat_MountainSide>Côté de la montagne :</TheMoat_MountainSide>
+  <TheMoat_SideWest>Ouest (gauche)</TheMoat_SideWest>
+  <TheMoat_SideEast>Est (droite)</TheMoat_SideEast>
+  <TheMoat_SideNorth>Nord (haut)</TheMoat_SideNorth>
+  <TheMoat_SideSouth>Sud (bas)</TheMoat_SideSouth>
+  <TheMoat_MountainSize>Taille de la montagne : {0} de la carte</TheMoat_MountainSize>
+  <TheMoat_EdgeRoughness>Irrégularité du bord : {0}</TheMoat_EdgeRoughness>
+  <TheMoat_EdgeRoughnessDesc>Degré d'irrégularité du pied de la montagne. À 0 %, c'est une falaise rectiligne ; des valeurs plus élevées ajoutent des baies et des éperons, jusqu'à environ 15 % de la carte en profondeur. La montagne reste pleine dans tous les cas.</TheMoat_EdgeRoughnessDesc>
+  <TheMoat_AllowOres>Autoriser les filons de minerai dans la montagne</TheMoat_AllowOres>
+  <TheMoat_AllowOresDesc>Si activé, des gisements de minerai exploitable (acier, composants, or, etc.) peuvent apparaître dans la montagne. Si désactivé, la montagne est faite à 100 % de roche naturelle pleine.</TheMoat_AllowOresDesc>
+  <TheMoat_Caves>Grottes dans la montagne</TheMoat_Caves>
+  <TheMoat_CavesDesc>Si activé, des tunnels naturels comme les grottes du jeu de base sont creusés au cœur de la montagne. Au moins {0} cases de roche pleine les séparent des plaines et {1} des bords de la carte : une grotte n'ouvre donc jamais un second accès à votre base. Aucune ruche d'insectes n'y apparaît.</TheMoat_CavesDesc>
+  <TheMoat_RemoveWater>Supprimer les lacs et l'eau dans les plaines</TheMoat_RemoveWater>
+  <TheMoat_RemoveWaterDesc>Si activé, les lacs, étangs et rivières des plaines sont transformés en sol sec selon la fertilité locale.</TheMoat_RemoveWaterDesc>
+  <TheMoat_FlattenHills>Aplanir les collines dans les plaines</TheMoat_FlattenHills>
+  <TheMoat_FlattenHillsDesc>Si activé, l'altitude des plaines reste plate : aucune paroi rocheuse ni pente de colline ne se forme du côté ouvert.</TheMoat_FlattenHillsDesc>
+  <TheMoat_ResetDefaults>Rétablir les valeurs par défaut</TheMoat_ResetDefaults>
+</LanguageData>

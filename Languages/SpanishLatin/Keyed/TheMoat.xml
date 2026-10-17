@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <TheMoat_MountainSide>Lado de la montaña:</TheMoat_MountainSide>
+  <TheMoat_SideWest>Oeste (izquierda)</TheMoat_SideWest>
+  <TheMoat_SideEast>Este (derecha)</TheMoat_SideEast>
+  <TheMoat_SideNorth>Norte (arriba)</TheMoat_SideNorth>
+  <TheMoat_SideSouth>Sur (abajo)</TheMoat_SideSouth>
+  <TheMoat_MountainSize>Tamaño de la montaña: {0} del mapa</TheMoat_MountainSize>
+  <TheMoat_EdgeRoughness>Irregularidad del borde: {0}</TheMoat_EdgeRoughness>
+  <TheMoat_EdgeRoughnessDesc>Lo irregular que es el pie de la montaña. Al 0 % es una pared de roca recta; los valores más altos añaden entrantes y salientes de hasta un 15 % del mapa de profundidad. La montaña sigue siendo maciza en cualquier caso.</TheMoat_EdgeRoughnessDesc>
+  <TheMoat_AllowOres>Permitir vetas de mineral en la montaña</TheMoat_AllowOres>
+  <TheMoat_AllowOresDesc>Si está activado, pueden aparecer vetas de mineral explotable (acero, componentes, oro, etc.) dentro de la montaña. Si está desactivado, la montaña es 100 % roca natural maciza.</TheMoat_AllowOresDesc>
+  <TheMoat_Caves>Cuevas dentro de la montaña</TheMoat_Caves>
+  <TheMoat_CavesDesc>Si está activado, se excavan túneles naturales como las cuevas del juego base en el interior de la montaña. Al menos {0} casillas de roca maciza las separan de las llanuras y {1} de los bordes del mapa, así que una cueva nunca abre una segunda entrada a tu base. En ellas no aparecen colmenas de insectos.</TheMoat_CavesDesc>
+  <TheMoat_RemoveWater>Eliminar lagos y agua en las llanuras</TheMoat_RemoveWater>
+  <TheMoat_RemoveWaterDesc>Si está activado, los lagos, estanques y ríos de las llanuras se convierten en suelo seco según la fertilidad local.</TheMoat_RemoveWaterDesc>
+  <TheMoat_FlattenHills>Aplanar las colinas en las llanuras</TheMoat_FlattenHills>
+  <TheMoat_FlattenHillsDesc>Si está activado, la elevación de las llanuras se mantiene plana, así que en el lado abierto no se generan paredes de roca ni laderas.</TheMoat_FlattenHillsDesc>
+  <TheMoat_ResetDefaults>Restablecer valores predeterminados</TheMoat_ResetDefaults>
+</LanguageData>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <TheMoat_MountainSide>Seite des Berges:</TheMoat_MountainSide>
+  <TheMoat_SideWest>Westen (links)</TheMoat_SideWest>
+  <TheMoat_SideEast>Osten (rechts)</TheMoat_SideEast>
+  <TheMoat_SideNorth>Norden (oben)</TheMoat_SideNorth>
+  <TheMoat_SideSouth>Süden (unten)</TheMoat_SideSouth>
+  <TheMoat_MountainSize>Größe des Berges: {0} der Karte</TheMoat_MountainSize>
+  <TheMoat_EdgeRoughness>Unregelmäßigkeit des Randes: {0}</TheMoat_EdgeRoughness>
+  <TheMoat_EdgeRoughnessDesc>Wie unregelmäßig der Fuß des Berges ist. Bei 0 % ist er eine gerade Felswand; höhere Werte fügen Buchten und Ausläufer hinzu, bis zu etwa 15 % der Karte tief. Der Berg bleibt in jedem Fall massiv.</TheMoat_EdgeRoughnessDesc>
+  <TheMoat_AllowOres>Erzadern im Berg erlauben</TheMoat_AllowOres>
+  <TheMoat_AllowOresDesc>Wenn aktiviert, können abbaubare Erzvorkommen (Stahl, Komponenten, Gold usw.) im Berg entstehen. Wenn deaktiviert, besteht der Berg zu 100 % aus massivem natürlichem Fels.</TheMoat_AllowOresDesc>
+  <TheMoat_Caves>Höhlen im Berg</TheMoat_Caves>
+  <TheMoat_CavesDesc>Wenn aktiviert, werden im Inneren des Berges natürliche Tunnel wie die Höhlen des Grundspiels gegraben. Mindestens {0} Felder massiver Fels trennen sie von den Ebenen und {1} von den Kartenrändern, sodass eine Höhle nie einen zweiten Zugang zu deiner Basis öffnet. In ihnen entstehen keine Insektennester.</TheMoat_CavesDesc>
+  <TheMoat_RemoveWater>Seen und Wasser in den Ebenen entfernen</TheMoat_RemoveWater>
+  <TheMoat_RemoveWaterDesc>Wenn aktiviert, werden Seen, Teiche und Flüsse in den Ebenen je nach örtlicher Fruchtbarkeit in trockenen Boden umgewandelt.</TheMoat_RemoveWaterDesc>
+  <TheMoat_FlattenHills>Hügel in den Ebenen einebnen</TheMoat_FlattenHills>
+  <TheMoat_FlattenHillsDesc>Wenn aktiviert, bleibt das Gelände der Ebenen flach, sodass auf der offenen Seite keine Felswände oder Hänge entstehen.</TheMoat_FlattenHillsDesc>
+  <TheMoat_ResetDefaults>Auf Standard zurücksetzen</TheMoat_ResetDefaults>
+</LanguageData>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <TheMoat_MountainSide>Mountain side:</TheMoat_MountainSide>
+  <TheMoat_SideWest>West (left)</TheMoat_SideWest>
+  <TheMoat_SideEast>East (right)</TheMoat_SideEast>
+  <TheMoat_SideNorth>North (top)</TheMoat_SideNorth>
+  <TheMoat_SideSouth>South (bottom)</TheMoat_SideSouth>
+  <TheMoat_MountainSize>Mountain size: {0} of the map</TheMoat_MountainSize>
+  <TheMoat_EdgeRoughness>Edge roughness: {0}</TheMoat_EdgeRoughness>
+  <TheMoat_EdgeRoughnessDesc>How irregular the foot of the mountain is. At 0% it is a straight cliff line; higher values add bays and spurs, up to about 15% of the map deep. The mountain stays solid either way.</TheMoat_EdgeRoughnessDesc>
+  <TheMoat_AllowOres>Allow ore veins in mountain</TheMoat_AllowOres>
+  <TheMoat_AllowOresDesc>If enabled, mineable ore lumps (steel, components, gold, etc.) can spawn inside the mountain. If disabled, the mountain is 100% solid natural rock.</TheMoat_AllowOresDesc>
+  <TheMoat_Caves>Caves inside the mountain</TheMoat_Caves>
+  <TheMoat_CavesDesc>If enabled, natural tunnels like vanilla caves are dug in the inner mountain. At least {0} cells of solid rock separate them from the plains and {1} from the map edges, so a cave never opens a second way into your base. No insect hives spawn in them.</TheMoat_CavesDesc>
+  <TheMoat_RemoveWater>Remove lakes and water on the plains</TheMoat_RemoveWater>
+  <TheMoat_RemoveWaterDesc>If enabled, any lakes, ponds, or rivers on the plains are converted into dry soil based on local fertility.</TheMoat_RemoveWaterDesc>
+  <TheMoat_FlattenHills>Flatten hills on the plains</TheMoat_FlattenHills>
+  <TheMoat_FlattenHillsDesc>If enabled, elevation on the plains is kept flat so no rock walls or hill slopes generate on the open side.</TheMoat_FlattenHillsDesc>
+  <TheMoat_ResetDefaults>Reset to Defaults</TheMoat_ResetDefaults>
+</LanguageData>
