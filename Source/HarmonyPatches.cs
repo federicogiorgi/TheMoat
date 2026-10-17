@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -15,14 +14,7 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    MoatManager.EnforceElevationAndCaves(map);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_ElevationFertility_Generate: " + ex);
-                }
+                MoatManager.EnforceElevationAndCaves(map);
             }
         }
 
@@ -33,15 +25,8 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    MoatManager.EnforceElevationAndCaves(map);
-                    MoatManager.GenerateMountainCaves(map);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_MutatorPostElevationFertility_Generate: " + ex);
-                }
+                MoatManager.EnforceElevationAndCaves(map);
+                MoatManager.GenerateMountainCaves(map);
             }
         }
 
@@ -91,16 +76,9 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    // Ores first, so lumps poking past the split line get cleared by the enforcement pass
-                    MoatManager.TopUpMountainOres(map, parms);
-                    MoatManager.EnforceRocksAndRoofs(map);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_RocksFromGrid_Generate: " + ex);
-                }
+                // Ores first, so lumps poking past the split line get cleared by the enforcement pass
+                MoatManager.TopUpMountainOres(map, parms);
+                MoatManager.EnforceRocksAndRoofs(map);
             }
         }
 
@@ -109,14 +87,7 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    MoatManager.CleanTerrain(map);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_Terrain_Generate: " + ex);
-                }
+                MoatManager.CleanTerrain(map);
             }
         }
 
@@ -126,14 +97,7 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    MoatManager.CleanTerrain(map);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_MutatorPostTerrain_Generate: " + ex);
-                }
+                MoatManager.CleanTerrain(map);
             }
         }
 
@@ -248,14 +212,7 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    MoatManager.EnsurePlayerStartSpot(map);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_FindPlayerStartSpot_Generate: " + ex);
-                }
+                MoatManager.EnsurePlayerStartSpot(map);
             }
         }
 
@@ -302,17 +259,7 @@ namespace TheMoat
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
-                try
-                {
-                    if (MoatManager.IsStartingBase(map))
-                    {
-                        MoatManager.EnforceRocksAndRoofs(map);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_Roads_Generate: " + ex);
-                }
+                MoatManager.EnforceRocksAndRoofs(map);
             }
         }
 
@@ -321,17 +268,7 @@ namespace TheMoat
         {
             public static void Postfix(Map __result)
             {
-                try
-                {
-                    if (__result != null && MoatManager.IsStartingBase(__result))
-                    {
-                        MoatManager.FinalizeMoatMap(__result);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("[The Moat] Error in Patch_MapGenerator_GenerateMap: " + ex);
-                }
+                MoatManager.FinalizeMoatMap(__result);
             }
         }
     }
