@@ -101,6 +101,62 @@ namespace TheMoat
             }
         }
 
+        // Structure mutators (ancient ruins, garrisons...) build without looking at the layout:
+        // fill the mountain back in and lay the moat again after them
+        [HarmonyPatch(typeof(GenStep_MutatorCriticalStructures), "Generate")]
+        public static class Patch_MutatorCriticalStructures_Generate
+        {
+            public static void Postfix(Map map, GenStepParams parms)
+            {
+                MoatManager.EnforceRocksAndRoofs(map);
+                MoatManager.ApplyMoat(map);
+            }
+        }
+
+        [HarmonyPatch(typeof(GenStep_MutatorNonCriticalStructures), "Generate")]
+        public static class Patch_MutatorNonCriticalStructures_Generate
+        {
+            public static void Postfix(Map map, GenStepParams parms)
+            {
+                MoatManager.EnforceRocksAndRoofs(map);
+                MoatManager.ApplyMoat(map);
+            }
+        }
+
+        // The harbor builds its piers along the coast, which the mountain, the moat and the water removal reshape:
+        // it throws an IndexOutOfRangeException looking for its spot, so no harbor on the starting map
+        [HarmonyPatch(typeof(TileMutatorWorker_Harbor), "GenerateCriticalStructures")]
+        public static class Patch_Harbor_GenerateCriticalStructures
+        {
+            public static bool Prefix(Map map)
+            {
+                try
+                {
+                    if (MoatManager.IsStartingBase(map))
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[The Moat] Error in Patch_Harbor_GenerateCriticalStructures: " + ex);
+                }
+                return true;
+            }
+        }
+
+        // The last mutator step: the ancient quarry digs its pit here. Also catches water that ruins laid on the plains.
+        [HarmonyPatch(typeof(GenStep_MutatorFinal), "Generate")]
+        public static class Patch_MutatorFinal_Generate
+        {
+            public static void Postfix(Map map, GenStepParams parms)
+            {
+                MoatManager.CleanTerrain(map);
+                MoatManager.EnforceRocksAndRoofs(map);
+                MoatManager.ApplyMoat(map);
+            }
+        }
+
         // Keep scattered features (monolith, geysers, ruins...) on the plains
         [HarmonyPatch(typeof(GenStep_Scatterer), "CanScatterAt")]
         public static class Patch_Scatterer_CanScatterAt
@@ -210,13 +266,18 @@ namespace TheMoat
         [HarmonyPatch(typeof(GenStep_FindPlayerStartSpot), "Generate")]
         public static class Patch_FindPlayerStartSpot_Generate
         {
+            public static bool Prefix(Map map)
+            {
+                return !MoatManager.TrySetPlayerStartSpot(map);
+            }
+
             public static void Postfix(Map map, GenStepParams parms)
             {
                 MoatManager.EnsurePlayerStartSpot(map);
             }
         }
 
-        // Roads must leave the map through the plains
+        // Roads must leave the map through the plains, not through the mountain or the moat
         [HarmonyPatch(typeof(GenStep_Roads), "FindRoadExitCell")]
         public static class Patch_Roads_FindRoadExitCell
         {
@@ -227,13 +288,13 @@ namespace TheMoat
                     if (MoatManager.IsStartingBase(map))
                     {
                         MoatLayout layout = MoatLayout.For(map);
-                        if (layout.IsMountain(__result))
+                        if (layout.IsMountain(__result) || layout.MoatAt(__result) != MoatWater.None)
                         {
                             IntVec3 newExit;
                             bool found = CellFinder.TryFindRandomEdgeCellWith(
                                 delegate(IntVec3 c)
                                 {
-                                    return !layout.IsMountain(c) && c.Standable(map);
+                                    return !layout.IsMountain(c) && layout.MoatAt(c) == MoatWater.None && c.Standable(map);
                                 },
                                 map,
                                 CellFinder.EdgeRoadChance_Always,
@@ -253,13 +314,14 @@ namespace TheMoat
             }
         }
 
-        // Roads clear rock along their path, so restore the mountain afterwards
+        // Roads clear rock along their path and pave over water, so restore the mountain and the moat afterwards
         [HarmonyPatch(typeof(GenStep_Roads), "Generate")]
         public static class Patch_Roads_Generate
         {
             public static void Postfix(Map map, GenStepParams parms)
             {
                 MoatManager.EnforceRocksAndRoofs(map);
+                MoatManager.ApplyMoat(map);
             }
         }
 

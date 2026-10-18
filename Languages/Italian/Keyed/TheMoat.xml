@@ -16,5 +16,16 @@
   <TheMoat_RemoveWaterDesc>Se attivo, laghi, stagni e fiumi nelle pianure vengono trasformati in terreno asciutto in base alla fertilità locale.</TheMoat_RemoveWaterDesc>
   <TheMoat_FlattenHills>Appiattisci le colline nelle pianure</TheMoat_FlattenHills>
   <TheMoat_FlattenHillsDesc>Se attivo, l'altitudine delle pianure resta piatta, così sul lato aperto non si formano pareti rocciose né pendii.</TheMoat_FlattenHillsDesc>
+  <TheMoat_MoatType>Fossato lungo la parete della montagna:</TheMoat_MoatType>
+  <TheMoat_MoatTypeDesc>Una fascia d'acqua nelle pianure lungo tutto il piede della montagna, anche attorno alle sporgenze e dentro le insenature. Chi vuole raggiungere la parete rocciosa a piedi deve attraversarla. L'acqua bassa gela quando fa freddo, come qualsiasi acqua bassa; quella profonda non gela mai.</TheMoat_MoatTypeDesc>
+  <TheMoat_MoatOff>Nessuno</TheMoat_MoatOff>
+  <TheMoat_MoatShallow>Acqua bassa (rallenta tutti)</TheMoat_MoatShallow>
+  <TheMoat_MoatDeep>Acqua profonda con guadi bassi</TheMoat_MoatDeep>
+  <TheMoat_MoatWidth>Larghezza del fossato: {0} celle</TheMoat_MoatWidth>
+  <TheMoat_MoatWidthDesc>Quanto si estende l'acqua dal piede della montagna. Un fossato profondo mantiene una riva di acqua bassa larga una cella dal lato delle pianure.</TheMoat_MoatWidthDesc>
+  <TheMoat_LandBridge>Ponte di terra al centro: largo {0} celle</TheMoat_LandBridge>
+  <TheMoat_LandBridgeDesc>Una striscia di terra asciutta che attraversa il fossato al centro della montagna: un collo di bottiglia naturale. 0 = nessun ponte di terra.</TheMoat_LandBridgeDesc>
+  <TheMoat_ShallowFords>Guadi bassi: {0}</TheMoat_ShallowFords>
+  <TheMoat_ShallowFordsDesc>Punti in cui il fossato profondo è solo acqua bassa, larghi {0} celle, in posizioni casuali lungo la montagna (sempre le stesse per la stessa casella). Con 0 guadi e nessun ponte di terra il fossato si attraversa solo costruendoci sopra o volando.</TheMoat_ShallowFordsDesc>
   <TheMoat_ResetDefaults>Ripristina predefiniti</TheMoat_ResetDefaults>
 </LanguageData>

@@ -16,5 +16,16 @@
   <TheMoat_RemoveWaterDesc>Si activé, les lacs, étangs et rivières des plaines sont transformés en sol sec selon la fertilité locale.</TheMoat_RemoveWaterDesc>
   <TheMoat_FlattenHills>Aplanir les collines dans les plaines</TheMoat_FlattenHills>
   <TheMoat_FlattenHillsDesc>Si activé, l'altitude des plaines reste plate : aucune paroi rocheuse ni pente de colline ne se forme du côté ouvert.</TheMoat_FlattenHillsDesc>
+  <TheMoat_MoatType>Douve au pied de la montagne :</TheMoat_MoatType>
+  <TheMoat_MoatTypeDesc>Une bande d'eau dans les plaines, le long de tout le pied de la montagne, y compris autour des éperons et dans les baies. Quiconque veut atteindre la paroi rocheuse à pied doit la traverser. L'eau peu profonde gèle par temps froid, comme toute eau peu profonde ; l'eau profonde ne gèle jamais.</TheMoat_MoatTypeDesc>
+  <TheMoat_MoatOff>Aucune</TheMoat_MoatOff>
+  <TheMoat_MoatShallow>Eau peu profonde (ralentit tout le monde)</TheMoat_MoatShallow>
+  <TheMoat_MoatDeep>Eau profonde avec gués peu profonds</TheMoat_MoatDeep>
+  <TheMoat_MoatWidth>Largeur de la douve : {0} cases</TheMoat_MoatWidth>
+  <TheMoat_MoatWidthDesc>Jusqu'où l'eau s'étend depuis le pied de la montagne. Une douve profonde garde une berge d'eau peu profonde d'une case côté plaines.</TheMoat_MoatWidthDesc>
+  <TheMoat_LandBridge>Pont de terre au centre : {0} cases de large</TheMoat_LandBridge>
+  <TheMoat_LandBridgeDesc>Une bande de terre sèche qui traverse la douve au milieu de la montagne : un goulet d'étranglement naturel. 0 = pas de pont de terre.</TheMoat_LandBridgeDesc>
+  <TheMoat_ShallowFords>Gués peu profonds : {0}</TheMoat_ShallowFords>
+  <TheMoat_ShallowFordsDesc>Endroits où la douve profonde n'est que de l'eau peu profonde, larges de {0} cases, placés au hasard le long de la montagne (toujours les mêmes pour la même case du monde). Sans gué ni pont de terre, la douve ne se franchit qu'en construisant par-dessus ou en volant.</TheMoat_ShallowFordsDesc>
   <TheMoat_ResetDefaults>Rétablir les valeurs par défaut</TheMoat_ResetDefaults>
 </LanguageData>

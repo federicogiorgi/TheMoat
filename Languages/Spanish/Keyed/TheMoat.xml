@@ -16,5 +16,16 @@
   <TheMoat_RemoveWaterDesc>Si está activado, los lagos, estanques y ríos de las llanuras se convierten en suelo seco según la fertilidad local.</TheMoat_RemoveWaterDesc>
   <TheMoat_FlattenHills>Aplanar las colinas en las llanuras</TheMoat_FlattenHills>
   <TheMoat_FlattenHillsDesc>Si está activado, la elevación de las llanuras se mantiene plana, así que en el lado abierto no se generan paredes de roca ni laderas.</TheMoat_FlattenHillsDesc>
+  <TheMoat_MoatType>Foso al pie de la montaña:</TheMoat_MoatType>
+  <TheMoat_MoatTypeDesc>Una franja de agua en las llanuras a lo largo de todo el pie de la montaña, también alrededor de los salientes y dentro de las ensenadas. Quien quiera llegar a pie a la pared de roca tiene que cruzarla. El agua poco profunda se congela cuando hace frío, como cualquier agua poco profunda; la profunda nunca se congela.</TheMoat_MoatTypeDesc>
+  <TheMoat_MoatOff>Ninguno</TheMoat_MoatOff>
+  <TheMoat_MoatShallow>Agua poco profunda (frena a todos)</TheMoat_MoatShallow>
+  <TheMoat_MoatDeep>Agua profunda con vados poco profundos</TheMoat_MoatDeep>
+  <TheMoat_MoatWidth>Anchura del foso: {0} casillas</TheMoat_MoatWidth>
+  <TheMoat_MoatWidthDesc>Hasta dónde llega el agua desde el pie de la montaña. Un foso profundo conserva una orilla de agua poco profunda de una casilla del lado de las llanuras.</TheMoat_MoatWidthDesc>
+  <TheMoat_LandBridge>Puente de tierra en el centro: {0} casillas de ancho</TheMoat_LandBridge>
+  <TheMoat_LandBridgeDesc>Una franja de tierra seca que cruza el foso en el centro de la montaña: un cuello de botella natural. 0 = sin puente de tierra.</TheMoat_LandBridgeDesc>
+  <TheMoat_ShallowFords>Vados poco profundos: {0}</TheMoat_ShallowFords>
+  <TheMoat_ShallowFordsDesc>Lugares donde el foso profundo es solo agua poco profunda, de {0} casillas de ancho, en puntos aleatorios a lo largo de la montaña (siempre los mismos para la misma casilla del mundo). Sin vados ni puente de tierra, el foso solo se cruza construyendo encima o volando.</TheMoat_ShallowFordsDesc>
   <TheMoat_ResetDefaults>Restablecer valores predeterminados</TheMoat_ResetDefaults>
 </LanguageData>

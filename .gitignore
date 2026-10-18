@@ -11,3 +11,6 @@ Thumbs.db
 *.log
 obj/
 bin/
+
+# Screenshots for the Workshop page (not part of the mod)
+Screenshots/

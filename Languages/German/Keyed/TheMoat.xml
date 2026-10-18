@@ -16,5 +16,16 @@
   <TheMoat_RemoveWaterDesc>Wenn aktiviert, werden Seen, Teiche und Flüsse in den Ebenen je nach örtlicher Fruchtbarkeit in trockenen Boden umgewandelt.</TheMoat_RemoveWaterDesc>
   <TheMoat_FlattenHills>Hügel in den Ebenen einebnen</TheMoat_FlattenHills>
   <TheMoat_FlattenHillsDesc>Wenn aktiviert, bleibt das Gelände der Ebenen flach, sodass auf der offenen Seite keine Felswände oder Hänge entstehen.</TheMoat_FlattenHillsDesc>
+  <TheMoat_MoatType>Wassergraben am Fuß des Berges:</TheMoat_MoatType>
+  <TheMoat_MoatTypeDesc>Ein Wasserstreifen in der Ebene entlang des ganzen Bergfußes, auch um Felsvorsprünge herum und in Buchten hinein. Wer zu Fuß zur Felswand will, muss ihn durchqueren. Seichtes Wasser friert bei Kälte zu wie jedes seichte Wasser; tiefes Wasser friert nie.</TheMoat_MoatTypeDesc>
+  <TheMoat_MoatOff>Keiner</TheMoat_MoatOff>
+  <TheMoat_MoatShallow>Seichtes Wasser (bremst alle)</TheMoat_MoatShallow>
+  <TheMoat_MoatDeep>Tiefes Wasser mit seichten Furten</TheMoat_MoatDeep>
+  <TheMoat_MoatWidth>Breite des Grabens: {0} Felder</TheMoat_MoatWidth>
+  <TheMoat_MoatWidthDesc>Wie weit das Wasser vom Bergfuß in die Ebene reicht. Ein tiefer Graben behält auf der Seite der Ebene ein ein Feld breites seichtes Ufer.</TheMoat_MoatWidthDesc>
+  <TheMoat_LandBridge>Landbrücke in der Mitte: {0} Felder breit</TheMoat_LandBridge>
+  <TheMoat_LandBridgeDesc>Ein Streifen trockenes Land quer über den Graben in der Mitte des Berges: ein natürlicher Engpass. 0 = keine Landbrücke.</TheMoat_LandBridgeDesc>
+  <TheMoat_ShallowFords>Seichte Furten: {0}</TheMoat_ShallowFords>
+  <TheMoat_ShallowFordsDesc>Stellen, an denen der tiefe Graben nur seichtes Wasser ist, {0} Felder breit, an zufälligen Orten entlang des Berges (für dasselbe Feld der Weltkarte immer dieselben). Ohne Furten und ohne Landbrücke kommt man nur hinüber, indem man darüber baut oder fliegt.</TheMoat_ShallowFordsDesc>
   <TheMoat_ResetDefaults>Auf Standard zurücksetzen</TheMoat_ResetDefaults>
 </LanguageData>

@@ -19,12 +19,14 @@ A RimWorld mod that forces your starting colony map (and only that map) to gener
 - No drop pods through the roof: the whole mountain is covered by thick overhead mountain.
 - Concentrated defenses: no 360-degree perimeter to defend. Put your turrets, bunkers and traps at the entrance.
 - If you want full relax: combine this mod with the "no infestations" one.
+- Optional moat: a band of water along the whole mountain face, so raiders have to wade through it or come over the dry land bridge in the middle, a ready-made choke point.
 
 ## Map generation
 
 - Choose your side: the mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
 - The mountain: solid rock with thick overhead roof. No caves (unless you turn them on in the mod options), no hollow pockets, no insect hives, no special features (ancient dangers, ruins, geysers, monolith). Only mineable ore veins, at the density of a vanilla mountainous map, even on flat tiles.
 - The plains: flat open land without hills or lakes. All vanilla surface features spawn there: trees, soil types, ancient dangers, ancient mech remains, steam geysers, ruins, roads, the Anomaly Void Monolith and wildlife.
+- The moat (optional, off by default): shallow water, or deep water with a few shallow fords, along the whole foot of the mountain, also around spurs and into bays. A strip of dry land crosses it in the middle of the mountain.
 - Starting colony only: later settlements, quest sites, encounter maps and camps generate normal vanilla maps.
 
 ## Mod settings
@@ -38,6 +40,10 @@ Options > Mod Settings > The Moat:
 - Ore veins in the mountain (default: ON).
 - Remove lakes and water on the plains (default: ON).
 - Flatten hills on the plains (default: ON).
+- Moat along the mountain face (default: none): shallow water, or deep water with shallow fords.
+- Moat width: 2 to 15 cells (default: 5). A deep moat keeps a one-cell shallow bank on the plains side.
+- Land bridge in the middle: 0 to 40 cells wide (default: 4). 0 = no land bridge.
+- Shallow fords in a deep moat: 0 to 6, each 3 cells wide, at random spots (default: 2).
 
 The settings are translated into Italian, French, German and Spanish (`Languages/`); other languages show English.
 

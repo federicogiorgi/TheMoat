@@ -25,7 +25,7 @@ if /I "%~dp0"=="%MOD_DIR%\" (
 )
 
 rem Only the files the game needs: no git history, sources or build script
-robocopy . "%MOD_DIR%" /MIR /NJH /NJS /NFL /NDL /NP /XD .git .vs .vscode .idea Source obj bin /XF build.bat .gitignore TheMoat.csproj >nul
+robocopy . "%MOD_DIR%" /MIR /NJH /NJS /NFL /NDL /NP /XD .git .vs .vscode .idea Source obj bin Screenshots /XF build.bat .gitignore TheMoat.csproj >nul
 if errorlevel 8 (
     echo Could not copy the mod to %MOD_DIR%
     exit /b 1

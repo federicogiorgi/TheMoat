@@ -184,6 +184,8 @@ namespace TheMoat
 
                         // Leave the tunnels open (only ever dug when caves are enabled)
                         if (!isNaturalRock && IsCaveAt(c)) continue;
+                        // e.g. the entrance of an Odyssey insect lair: it stays, walled in by the rock around it
+                        if (edifice != null && !edifice.def.destroyable) continue;
 
                         if (!isNaturalRock || (!MoatMod.Settings.allowOresInMountain && isMineableOre))
                         {
@@ -191,6 +193,8 @@ namespace TheMoat
                             {
                                 edifice.Destroy(DestroyMode.Vanish);
                             }
+                            // e.g. dormant mechs of ancient ruins the structure mutators built in the mountain
+                            RemovePawns(map, c);
 
                             ThingDef rockDef = GetRockDefForMap(map, c);
                             if (rockDef != null)
@@ -226,6 +230,20 @@ namespace TheMoat
             catch (Exception ex)
             {
                 Log.Error("[The Moat] Error in EnforceRocksAndRoofs: " + ex);
+            }
+        }
+
+        private static void RemovePawns(Map map, IntVec3 c)
+        {
+            List<Thing> things = c.GetThingList(map);
+            for (int i = things.Count - 1; i >= 0; i--)
+            {
+                if (i >= things.Count) continue;
+                Pawn pawn = things[i] as Pawn;
+                if (pawn != null && pawn.Faction != Faction.OfPlayer)
+                {
+                    pawn.Destroy(DestroyMode.Vanish);
+                }
             }
         }
 
@@ -454,12 +472,85 @@ namespace TheMoat
             }
         }
 
+        // Lays the moat water (see MoatLayout.BuildMoat). First laid after the roads: vanilla's road exit search
+        // fails on a map edge closed off by deep water. Then again after every later step that builds on the plains.
+        public static void ApplyMoat(Map map)
+        {
+            if (!IsStartingBase(map)) return;
+
+            try
+            {
+                MoatLayout layout = MoatLayout.For(map);
+                if (layout.HasMoat) ApplyMoat(map, layout);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[The Moat] Error in ApplyMoat: " + ex);
+            }
+        }
+
+        private static void ApplyMoat(Map map, MoatLayout layout)
+        {
+            TerrainDef shallow = TerrainDefOf.WaterShallow;
+            TerrainDef deep = TerrainDefOf.WaterDeep;
+            MapGenFloatGrid fertGrid = MapGenerator.Fertility;
+            foreach (IntVec3 c in map.AllCells)
+            {
+                MoatWater water = layout.MoatAt(c);
+                if (water == MoatWater.None) continue;
+
+                ClearMoatCell(map, c, water);
+                // Bridges and harbor piers are foundations laid over the water
+                if (map.terrainGrid.FoundationAt(c) != null)
+                {
+                    map.terrainGrid.RemoveFoundation(c, false);
+                }
+
+                TerrainDef current = map.terrainGrid.TerrainAt(c);
+                if (water == MoatWater.Bridge)
+                {
+                    // Dry ground across, even where lakes and marsh are kept on the plains
+                    if (IsWaterOrWetTerrain(current))
+                    {
+                        map.terrainGrid.SetTerrain(c, GetBiomeDryTerrain(map, fertGrid != null ? fertGrid[c] : 1.0f));
+                    }
+                    continue;
+                }
+
+                TerrainDef t = water == MoatWater.Deep ? deep : shallow;
+                if (current != t)
+                {
+                    map.terrainGrid.SetTerrain(c, t);
+                }
+            }
+        }
+
+        // Mutators (harbor piers, junkyards, abandoned colonies...) build over the moat and the land bridge: clear them away.
+        // Loose items would float on deep water, so they go too.
+        private static void ClearMoatCell(Map map, IntVec3 c, MoatWater water)
+        {
+            List<Thing> things = c.GetThingList(map);
+            for (int i = things.Count - 1; i >= 0; i--)
+            {
+                if (i >= things.Count) continue;
+                Thing t = things[i];
+                bool building = t is Building;
+                bool floatingItem = water == MoatWater.Deep && t.def.category == ThingCategory.Item;
+                if ((building || floatingItem) && !t.Destroyed && t.def.destroyable)
+                {
+                    t.Destroy(DestroyMode.Vanish);
+                }
+            }
+        }
+
         public static bool IsWaterOrWetTerrain(TerrainDef def)
         {
             if (def == null) return false;
             if (def.IsWater || def.IsRiver || def.takeSplashes) return true;
 
             string name = def.defName.ToLowerInvariant();
+            // Odyssey's dry lake bed is dry ground
+            if (name.Contains("dry")) return false;
             if (name.Contains("water") || name.Contains("marsh") || name.Contains("lake") || name.Contains("mud"))
             {
                 return true;
@@ -520,17 +611,7 @@ namespace TheMoat
 
                 if (layout.DistanceFromMountain(startSpot) < 5 || !startSpot.Standable(map) || map.roofGrid.Roofed(startSpot))
                 {
-                    IntVec3 bestSpot = CellFinderLoose.TryFindCentralCell(
-                        map,
-                        10,
-                        5,
-                        delegate(IntVec3 c)
-                        {
-                            return layout.DistanceFromMountain(c) >= 5 && c.Standable(map) && map.roofGrid.RoofAt(c) == null;
-                        },
-                        true
-                    );
-
+                    IntVec3 bestSpot = FindPlainsStartSpot(map, layout);
                     if (bestSpot.IsValid)
                     {
                         MapGenerator.PlayerStartSpot = bestSpot;
@@ -541,6 +622,80 @@ namespace TheMoat
             {
                 Log.Warning("[The Moat] Error in EnsurePlayerStartSpot: " + ex);
             }
+        }
+
+        // Vanilla's start spot search logs an error when the plains are cramped (atolls, islands, a big mountain): pick it ourselves
+        public static bool TrySetPlayerStartSpot(Map map)
+        {
+            if (!IsStartingBase(map)) return false;
+
+            try
+            {
+                IntVec3 spot = FindPlainsStartSpot(map, MoatLayout.For(map));
+                if (!spot.IsValid) return false;
+                MapGenerator.PlayerStartSpot = spot;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("[The Moat] Error in TrySetPlayerStartSpot: " + ex);
+                return false;
+            }
+        }
+
+        // The open cell nearest the middle of the largest stretch of plains, with room around it, so the colonists
+        // don't land on a little island
+        private static IntVec3 FindPlainsStartSpot(Map map, MoatLayout layout)
+        {
+            Func<IntVec3, bool> open = c => c.InBounds(map) && c.Standable(map) && map.roofGrid.RoofAt(c) == null;
+            Func<IntVec3, bool> usable = c => open(c) && layout.DistanceFromMountain(c) >= 5;
+
+            // Largest 4-way connected group of usable cells
+            int sizeX = map.Size.x;
+            bool[] seen = new bool[sizeX * map.Size.z];
+            List<IntVec3> candidates = new List<IntVec3>();
+            List<IntVec3> group = new List<IntVec3>();
+            Queue<IntVec3> queue = new Queue<IntVec3>();
+            foreach (IntVec3 start in map.AllCells)
+            {
+                if (seen[start.z * sizeX + start.x] || !usable(start)) continue;
+                group.Clear();
+                seen[start.z * sizeX + start.x] = true;
+                queue.Enqueue(start);
+                while (queue.Count > 0)
+                {
+                    IntVec3 cur = queue.Dequeue();
+                    group.Add(cur);
+                    for (int d = 0; d < 4; d++)
+                    {
+                        IntVec3 n = cur + GenAdj.CardinalDirections[d];
+                        if (!n.InBounds(map) || seen[n.z * sizeX + n.x] || !usable(n)) continue;
+                        seen[n.z * sizeX + n.x] = true;
+                        queue.Enqueue(n);
+                    }
+                }
+                if (group.Count > candidates.Count) candidates = new List<IntVec3>(group);
+            }
+            if (candidates.Count == 0) return IntVec3.Invalid;
+
+            long sumX = 0, sumZ = 0;
+            foreach (IntVec3 c in candidates)
+            {
+                sumX += c.x;
+                sumZ += c.z;
+            }
+
+            IntVec3 middle = new IntVec3((int)(sumX / candidates.Count), 0, (int)(sumZ / candidates.Count));
+            IntVec3 best = IntVec3.Invalid;
+            int bestDist = int.MaxValue;
+            foreach (IntVec3 c in candidates)
+            {
+                int dist = (c - middle).LengthHorizontalSquared;
+                if (dist >= bestDist || !CellRect.CenteredOn(c, 2).All(open)) continue;
+                best = c;
+                bestDist = dist;
+            }
+            return best.IsValid ? best : candidates[0];
         }
 
         public static void FinalizeMoatMap(Map map)
@@ -555,8 +710,12 @@ namespace TheMoat
                     comp.hasGeneratedStartingBase = true;
                 }
 
-                Log.Message("[The Moat] Starting map generated: mountain on the " + MoatMod.Settings.mountainSide.ToString().ToLowerInvariant()
-                    + " side, " + MoatMod.Settings.mountainPercent.ToString("P0") + " of the map.");
+                MoatSettings settings = MoatMod.Settings;
+                string moat = settings.moatType == MoatType.Off ? "no moat"
+                    : settings.moatType.ToString().ToLowerInvariant() + " moat " + settings.moatWidth + " cells wide, land bridge " + settings.landBridgeWidth
+                    + (settings.moatType == MoatType.Deep ? ", " + settings.shallowFords + " fords" : "");
+                Log.Message("[The Moat] Starting map generated: mountain on the " + settings.mountainSide.ToString().ToLowerInvariant()
+                    + " side, " + settings.mountainPercent.ToString("P0") + " of the map, " + moat + ".");
             }
             catch (Exception ex)
             {
