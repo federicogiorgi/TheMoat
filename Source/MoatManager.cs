@@ -205,13 +205,17 @@ namespace TheMoat
                     }
                 }
 
-                // Plains: no rock and no mountain roof
+                // Plains: no rock and no mountain roof, except on the hills when they are not flattened.
+                // Ore lumps poking out of the mountain and anything in the moat go either way.
+                bool keepHills = !MoatMod.Settings.flattenHillsOnPlains;
+                MapGenFloatGrid elevation = MapGenerator.Elevation;
                 for (int z = 0; z < map.Size.z; z++)
                 {
                     for (int x = 0; x < map.Size.x; x++)
                     {
                         IntVec3 c = new IntVec3(x, 0, z);
                         if (layout.IsMountain(c)) continue;
+                        if (keepHills && layout.MoatAt(c) == MoatWater.None && IsHillAt(elevation, c)) continue;
 
                         RoofDef r = map.roofGrid.RoofAt(c);
                         if (r == RoofDefOf.RoofRockThick || r == RoofDefOf.RoofRockThin)
@@ -231,6 +235,14 @@ namespace TheMoat
             {
                 Log.Error("[The Moat] Error in EnforceRocksAndRoofs: " + ex);
             }
+        }
+
+        // Vanilla GenStep_RocksFromGrid puts rock wherever the elevation is above this
+        private const float HillElevation = 0.7f;
+
+        private static bool IsHillAt(MapGenFloatGrid elevation, IntVec3 c)
+        {
+            return elevation == null || elevation[c] > HillElevation;
         }
 
         private static void RemovePawns(Map map, IntVec3 c)
