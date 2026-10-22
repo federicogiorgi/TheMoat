@@ -18,8 +18,15 @@ namespace TheMoat
             {
                 Harmony harmony = new Harmony("Keldarton.TheMoat");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
-                Log.Message("[The Moat] Loaded. Mountain on the " + Settings.mountainSide.ToString().ToLowerInvariant() + " side, "
-                    + Settings.mountainPercent.ToString("P0") + " of the map.");
+                if (Settings.mapShape == MoatShape.Island)
+                {
+                    Log.Message("[The Moat] Loaded. Island with its way in on the " + Settings.mountainSide.ToString().ToLowerInvariant() + " side.");
+                }
+                else
+                {
+                    Log.Message("[The Moat] Loaded. Mountain on the " + Settings.mountainSide.ToString().ToLowerInvariant() + " side, "
+                        + Settings.mountainPercent.ToString("P0") + " of the map.");
+                }
             }
             catch (Exception ex)
             {

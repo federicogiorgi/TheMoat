@@ -27,5 +27,21 @@
   <TheMoat_LandBridgeDesc>Una franja de tierra seca que cruza el foso en el centro de la montaña: un cuello de botella natural. 0 = sin puente de tierra.</TheMoat_LandBridgeDesc>
   <TheMoat_ShallowFords>Vados poco profundos: {0}</TheMoat_ShallowFords>
   <TheMoat_ShallowFordsDesc>Lugares donde el foso profundo es solo agua poco profunda, de {0} casillas de ancho, en puntos aleatorios a lo largo de la montaña (siempre los mismos para la misma casilla del mundo). Sin vados ni puente de tierra, el foso solo se cruza construyendo encima o volando.</TheMoat_ShallowFordsDesc>
+  <TheMoat_MapShape>Disposición del mapa:</TheMoat_MapShape>
+  <TheMoat_MapShapeDesc>Montaña a un lado: una montaña maciza ocupa un lado del mapa y llanuras abiertas el resto. Isla: una isla en el centro del mapa, rodeada de agua profunda, con un único acceso.</TheMoat_MapShapeDesc>
+  <TheMoat_ShapeMountainSide>Montaña a un lado</TheMoat_ShapeMountainSide>
+  <TheMoat_ShapeIsland>Isla con un único acceso</TheMoat_ShapeIsland>
+  <TheMoat_PassageSide>Acceso por el lado:</TheMoat_PassageSide>
+  <TheMoat_IslandSize>Tamaño de la isla: {0} del ancho del mapa</TheMoat_IslandSize>
+  <TheMoat_IslandSizeDesc>Lo ancha que es la isla en su centro. Entre su agua y los bordes del mapa siempre queda una franja de llanura abierta.</TheMoat_IslandSizeDesc>
+  <TheMoat_ShoreRoughnessDesc>Lo irregular que es la costa de la isla. Al 0 % la isla es redonda; valores más altos añaden bahías y cabos. El agua sigue la costa todo alrededor.</TheMoat_ShoreRoughnessDesc>
+  <TheMoat_IslandTerrain>Isla:</TheMoat_IslandTerrain>
+  <TheMoat_IslandTerrainDesc>Toda montaña: una sola montaña maciza con techo grueso en la que excavar tu base; la colonia empieza en la llanura frente al acceso. Terreno abierto: terreno normal con suelo, árboles y fauna; la colonia empieza en el centro de la isla.</TheMoat_IslandTerrainDesc>
+  <TheMoat_IslandMountain>Toda montaña</TheMoat_IslandMountain>
+  <TheMoat_IslandOpen>Terreno abierto (terreno normal)</TheMoat_IslandOpen>
+  <TheMoat_IslandWater>Agua profunda alrededor de la isla: {0} casillas de ancho</TheMoat_IslandWater>
+  <TheMoat_IslandWaterDesc>Agua profunda todo alrededor de la isla: nadie puede vadearla y nunca se congela. Su borde exterior es una orilla poco profunda de una casilla.</TheMoat_IslandWaterDesc>
+  <TheMoat_IslandPassage>Acceso: {0} casillas de ancho</TheMoat_IslandPassage>
+  <TheMoat_IslandPassageDesc>Una franja recta de tierra seca a través del agua en el lado elegido: la única forma de llegar a la isla a pie. 0 = sin acceso; se cruza construyendo sobre el agua o volando.</TheMoat_IslandPassageDesc>
   <TheMoat_ResetDefaults>Restablecer valores predeterminados</TheMoat_ResetDefaults>
 </LanguageData>

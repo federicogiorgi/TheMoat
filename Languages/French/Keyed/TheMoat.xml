@@ -27,5 +27,21 @@
   <TheMoat_LandBridgeDesc>Une bande de terre sèche qui traverse la douve au milieu de la montagne : un goulet d'étranglement naturel. 0 = pas de pont de terre.</TheMoat_LandBridgeDesc>
   <TheMoat_ShallowFords>Gués peu profonds : {0}</TheMoat_ShallowFords>
   <TheMoat_ShallowFordsDesc>Endroits où la douve profonde n'est que de l'eau peu profonde, larges de {0} cases, placés au hasard le long de la montagne (toujours les mêmes pour la même case du monde). Sans gué ni pont de terre, la douve ne se franchit qu'en construisant par-dessus ou en volant.</TheMoat_ShallowFordsDesc>
+  <TheMoat_MapShape>Disposition de la carte :</TheMoat_MapShape>
+  <TheMoat_MapShapeDesc>Montagne d'un côté : une montagne pleine occupe un côté de la carte et des plaines ouvertes le reste. Île : une île au milieu de la carte, entourée d'eau profonde, avec un seul accès.</TheMoat_MapShapeDesc>
+  <TheMoat_ShapeMountainSide>Montagne d'un côté</TheMoat_ShapeMountainSide>
+  <TheMoat_ShapeIsland>Île avec un seul accès</TheMoat_ShapeIsland>
+  <TheMoat_PassageSide>Accès par le côté :</TheMoat_PassageSide>
+  <TheMoat_IslandSize>Taille de l'île : {0} de la largeur de la carte</TheMoat_IslandSize>
+  <TheMoat_IslandSizeDesc>La largeur de l'île en son milieu. Une bande de plaine ouverte reste toujours entre son eau et les bords de la carte.</TheMoat_IslandSizeDesc>
+  <TheMoat_ShoreRoughnessDesc>L'irrégularité de la côte de l'île. À 0 % l'île est ronde ; des valeurs plus élevées ajoutent des baies et des caps. L'eau suit la côte tout autour.</TheMoat_ShoreRoughnessDesc>
+  <TheMoat_IslandTerrain>Île :</TheMoat_IslandTerrain>
+  <TheMoat_IslandTerrainDesc>Toute en montagne : une seule montagne pleine avec un toit épais où creuser votre base ; la colonie commence dans la plaine devant l'accès. Terrain ouvert : terrain normal avec sol, arbres et faune ; la colonie commence au milieu de l'île.</TheMoat_IslandTerrainDesc>
+  <TheMoat_IslandMountain>Toute en montagne</TheMoat_IslandMountain>
+  <TheMoat_IslandOpen>Terrain ouvert (terrain normal)</TheMoat_IslandOpen>
+  <TheMoat_IslandWater>Eau profonde autour de l'île : {0} cases de large</TheMoat_IslandWater>
+  <TheMoat_IslandWaterDesc>De l'eau profonde tout autour de l'île : personne ne peut la traverser à gué et elle ne gèle jamais. Son bord extérieur est une berge peu profonde d'une case.</TheMoat_IslandWaterDesc>
+  <TheMoat_IslandPassage>Accès : {0} cases de large</TheMoat_IslandPassage>
+  <TheMoat_IslandPassageDesc>Une bande droite de terre sèche à travers l'eau, du côté choisi : le seul moyen d'atteindre l'île à pied. 0 = aucun accès ; on traverse en construisant sur l'eau ou en volant.</TheMoat_IslandPassageDesc>
   <TheMoat_ResetDefaults>Rétablir les valeurs par défaut</TheMoat_ResetDefaults>
 </LanguageData>

@@ -27,5 +27,21 @@
   <TheMoat_LandBridgeDesc>A strip of dry land across the moat at the middle of the mountain: a natural choke point. 0 = no land bridge.</TheMoat_LandBridgeDesc>
   <TheMoat_ShallowFords>Shallow fords: {0}</TheMoat_ShallowFords>
   <TheMoat_ShallowFordsDesc>Places where the deep moat is only shallow water, {0} cells wide, at random spots along the mountain (always the same for the same tile). With 0 fords and no land bridge the moat can only be crossed by building over it or by flying.</TheMoat_ShallowFordsDesc>
+  <TheMoat_MapShape>Map layout:</TheMoat_MapShape>
+  <TheMoat_MapShapeDesc>Mountain on one side: a solid mountain fills one side of the map and open plains the rest. Island: an island in the middle of the map, ringed by deep water, with a single way in.</TheMoat_MapShapeDesc>
+  <TheMoat_ShapeMountainSide>Mountain on one side</TheMoat_ShapeMountainSide>
+  <TheMoat_ShapeIsland>Island with one way in</TheMoat_ShapeIsland>
+  <TheMoat_PassageSide>Way in from:</TheMoat_PassageSide>
+  <TheMoat_IslandSize>Island size: {0} of the map width</TheMoat_IslandSize>
+  <TheMoat_IslandSizeDesc>How wide the island is across its middle. A band of open plains always stays between its water and the map edges.</TheMoat_IslandSizeDesc>
+  <TheMoat_ShoreRoughnessDesc>How irregular the island's shore is. At 0% the island is round; higher values add bays and headlands. The water follows the shore all the way round.</TheMoat_ShoreRoughnessDesc>
+  <TheMoat_IslandTerrain>Island:</TheMoat_IslandTerrain>
+  <TheMoat_IslandTerrainDesc>All mountain: one solid mountain with thick roof to dig your base into; the colony starts on the plains in front of the way in. Open land: normal terrain with soil, trees and wildlife; the colony starts in the middle of the island.</TheMoat_IslandTerrainDesc>
+  <TheMoat_IslandMountain>All mountain</TheMoat_IslandMountain>
+  <TheMoat_IslandOpen>Open land (normal terrain)</TheMoat_IslandOpen>
+  <TheMoat_IslandWater>Deep water around the island: {0} cells wide</TheMoat_IslandWater>
+  <TheMoat_IslandWaterDesc>Deep water all the way round the island: nobody can wade through it and it never freezes. Its outer edge is a one-cell shallow bank.</TheMoat_IslandWaterDesc>
+  <TheMoat_IslandPassage>Way in: {0} cells wide</TheMoat_IslandPassage>
+  <TheMoat_IslandPassageDesc>A straight strip of dry land across the water on the chosen side: the only way onto the island on foot. 0 = no way in; cross by building over the water or by flying.</TheMoat_IslandPassageDesc>
   <TheMoat_ResetDefaults>Reset to Defaults</TheMoat_ResetDefaults>
 </LanguageData>

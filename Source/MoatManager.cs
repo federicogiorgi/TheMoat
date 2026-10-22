@@ -206,7 +206,7 @@ namespace TheMoat
                 }
 
                 // Plains: no rock and no mountain roof, except on the hills when they are not flattened.
-                // Ore lumps poking out of the mountain and anything in the moat go either way.
+                // Ore lumps poking out of the mountain and anything in the moat or on an island's way in go either way.
                 bool keepHills = !MoatMod.Settings.flattenHillsOnPlains;
                 MapGenFloatGrid elevation = MapGenerator.Elevation;
                 for (int z = 0; z < map.Size.z; z++)
@@ -215,7 +215,7 @@ namespace TheMoat
                     {
                         IntVec3 c = new IntVec3(x, 0, z);
                         if (layout.IsMountain(c)) continue;
-                        if (keepHills && layout.MoatAt(c) == MoatWater.None && IsHillAt(elevation, c)) continue;
+                        if (keepHills && layout.MoatAt(c) == MoatWater.None && !layout.IsOnWayIn(c) && IsHillAt(elevation, c)) continue;
 
                         RoofDef r = map.roofGrid.RoofAt(c);
                         if (r == RoofDefOf.RoofRockThick || r == RoofDefOf.RoofRockThin)
@@ -280,15 +280,25 @@ namespace TheMoat
                 if (lumpsToAdd <= 0) return;
 
                 MoatOreScatterer scatterer = new MoatOreScatterer();
+                List<IntVec3> islandCells = layout.HasIsland ? layout.InnerMountainCells(OreLumpEdgeMargin) : null;
                 int added = 0;
                 for (int i = 0; i < lumpsToAdd; i++)
                 {
                     for (int attempt = 0; attempt < 50; attempt++)
                     {
-                        int along = Rand.Range(0, layout.EdgeLength);
-                        int maxCenterDepth = layout.MountainDepthAt(along) - OreLumpEdgeMargin;
-                        if (maxCenterDepth <= 0) continue;
-                        IntVec3 c = layout.CellAt(Rand.Range(0, maxCenterDepth), along);
+                        IntVec3 c;
+                        if (islandCells != null)
+                        {
+                            if (islandCells.Count == 0) break;
+                            c = islandCells.RandomElement();
+                        }
+                        else
+                        {
+                            int along = Rand.Range(0, layout.EdgeLength);
+                            int maxCenterDepth = layout.MountainDepthAt(along) - OreLumpEdgeMargin;
+                            if (maxCenterDepth <= 0) continue;
+                            c = layout.CellAt(Rand.Range(0, maxCenterDepth), along);
+                        }
                         Building edifice = c.GetEdifice(map);
                         if (edifice != null && edifice.def.IsNonResourceNaturalRock)
                         {
@@ -656,11 +666,18 @@ namespace TheMoat
         }
 
         // The open cell nearest the middle of the largest stretch of plains, with room around it, so the colonists
-        // don't land on a little island
+        // don't land on a little island. On an island map: on an open island near its middle, or in front of
+        // a mountain island's way in.
         private static IntVec3 FindPlainsStartSpot(Map map, MoatLayout layout)
         {
             Func<IntVec3, bool> open = c => c.InBounds(map) && c.Standable(map) && map.roofGrid.RoofAt(c) == null;
             Func<IntVec3, bool> usable = c => open(c) && layout.DistanceFromMountain(c) >= 5;
+            if (layout.HasIsland)
+            {
+                bool onIsland = !layout.islandIsMountain;
+                Func<IntVec3, bool> plains = usable;
+                usable = c => plains(c) && layout.IsOnIsland(c) == onIsland;
+            }
 
             // Largest 4-way connected group of usable cells
             int sizeX = map.Size.x;
@@ -697,7 +714,8 @@ namespace TheMoat
                 sumZ += c.z;
             }
 
-            IntVec3 middle = new IntVec3((int)(sumX / candidates.Count), 0, (int)(sumZ / candidates.Count));
+            IntVec3 middle = layout.HasIsland ? layout.startTarget
+                : new IntVec3((int)(sumX / candidates.Count), 0, (int)(sumZ / candidates.Count));
             IntVec3 best = IntVec3.Invalid;
             int bestDist = int.MaxValue;
             foreach (IntVec3 c in candidates)
@@ -723,6 +741,14 @@ namespace TheMoat
                 }
 
                 MoatSettings settings = MoatMod.Settings;
+                if (settings.mapShape == MoatShape.Island)
+                {
+                    Log.Message("[The Moat] Starting map generated: " + (settings.islandTerrain == IslandTerrain.Mountain ? "mountain" : "open")
+                        + " island " + settings.islandPercent.ToString("P0") + " of the map wide, deep water " + settings.islandWaterWidth
+                        + " cells wide, way in " + settings.islandPassageWidth + " cells wide on the "
+                        + settings.mountainSide.ToString().ToLowerInvariant() + " side.");
+                    return;
+                }
                 string moat = settings.moatType == MoatType.Off ? "no moat"
                     : settings.moatType.ToString().ToLowerInvariant() + " moat " + settings.moatWidth + " cells wide, land bridge " + settings.landBridgeWidth
                     + (settings.moatType == MoatType.Deep ? ", " + settings.shallowFords + " fords" : "");

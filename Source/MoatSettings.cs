@@ -12,6 +12,8 @@ namespace TheMoat
         public const int MaxMoatWidth = 15;
         public const int MaxLandBridgeWidth = 40;
         public const int MaxShallowFords = 6;
+        public const float MinIslandPercent = 0.20f;
+        public const float MaxIslandPercent = 0.70f;
 
         public MoatSide mountainSide = MoatSide.West;
         public float mountainPercent = 0.50f;
@@ -24,6 +26,11 @@ namespace TheMoat
         public int moatWidth = 5;
         public int landBridgeWidth = 4;
         public int shallowFords = 2;
+        public MoatShape mapShape = MoatShape.MountainSide;
+        public IslandTerrain islandTerrain = IslandTerrain.Mountain;
+        public float islandPercent = 0.40f;
+        public int islandWaterWidth = 6;
+        public int islandPassageWidth = 3;
 
         public override void ExposeData()
         {
@@ -39,6 +46,11 @@ namespace TheMoat
             Scribe_Values.Look(ref moatWidth, "moatWidth", 5);
             Scribe_Values.Look(ref landBridgeWidth, "landBridgeWidth", 4);
             Scribe_Values.Look(ref shallowFords, "shallowFords", 2);
+            Scribe_Values.Look(ref mapShape, "mapShape", MoatShape.MountainSide);
+            Scribe_Values.Look(ref islandTerrain, "islandTerrain", IslandTerrain.Mountain);
+            Scribe_Values.Look(ref islandPercent, "islandPercent", 0.40f);
+            Scribe_Values.Look(ref islandWaterWidth, "islandWaterWidth", 6);
+            Scribe_Values.Look(ref islandPassageWidth, "islandPassageWidth", 3);
 
             // Older versions allowed 10-90%
             mountainPercent = Mathf.Clamp(mountainPercent, MinMountainPercent, MaxMountainPercent);
@@ -46,16 +58,30 @@ namespace TheMoat
             moatWidth = Mathf.Clamp(moatWidth, MinMoatWidth, MaxMoatWidth);
             landBridgeWidth = Mathf.Clamp(landBridgeWidth, 0, MaxLandBridgeWidth);
             shallowFords = Mathf.Clamp(shallowFords, 0, MaxShallowFords);
+            islandPercent = Mathf.Clamp(islandPercent, MinIslandPercent, MaxIslandPercent);
+            islandWaterWidth = Mathf.Clamp(islandWaterWidth, MinMoatWidth, MaxMoatWidth);
+            islandPassageWidth = Mathf.Clamp(islandPassageWidth, 0, MaxLandBridgeWidth);
         }
 
         public void DoWindowContents(Rect inRect)
         {
-            // Two columns: the mountain on the left, the moat on the right
+            // Two columns: the map layout and the mountain or island on the left, the water on the right
             Listing_Standard listing = new Listing_Standard();
             listing.ColumnWidth = (inRect.width - 34f) / 2f;
             listing.Begin(inRect);
 
-            listing.Label("TheMoat_MountainSide".Translate());
+            listing.Label("TheMoat_MapShape".Translate(), -1f, "TheMoat_MapShapeDesc".Translate());
+            foreach (MoatShape shape in Enum.GetValues(typeof(MoatShape)))
+            {
+                if (listing.RadioButton(("TheMoat_Shape" + shape).Translate(), mapShape == shape, 12f))
+                {
+                    mapShape = shape;
+                }
+            }
+            listing.Gap(12f);
+
+            bool island = mapShape == MoatShape.Island;
+            listing.Label((island ? "TheMoat_PassageSide" : "TheMoat_MountainSide").Translate());
             foreach (MoatSide side in Enum.GetValues(typeof(MoatSide)))
             {
                 if (listing.RadioButton(("TheMoat_Side" + side).Translate(), mountainSide == side, 12f))
@@ -65,20 +91,33 @@ namespace TheMoat
             }
             listing.Gap(12f);
 
-            listing.Label("TheMoat_MountainSize".Translate(mountainPercent.ToString("P0")));
-            mountainPercent = listing.Slider(mountainPercent, MinMountainPercent, MaxMountainPercent);
+            if (island)
+            {
+                listing.Label("TheMoat_IslandSize".Translate(islandPercent.ToString("P0")), -1f, "TheMoat_IslandSizeDesc".Translate());
+                islandPercent = listing.Slider(islandPercent, MinIslandPercent, MaxIslandPercent);
+            }
+            else
+            {
+                listing.Label("TheMoat_MountainSize".Translate(mountainPercent.ToString("P0")));
+                mountainPercent = listing.Slider(mountainPercent, MinMountainPercent, MaxMountainPercent);
+            }
             listing.Gap(12f);
 
-            listing.Label("TheMoat_EdgeRoughness".Translate(edgeRoughness.ToString("P0")), -1f, "TheMoat_EdgeRoughnessDesc".Translate());
+            listing.Label("TheMoat_EdgeRoughness".Translate(edgeRoughness.ToString("P0")), -1f,
+                (island ? "TheMoat_ShoreRoughnessDesc" : "TheMoat_EdgeRoughnessDesc").Translate());
             edgeRoughness = listing.Slider(edgeRoughness, 0f, 1f);
             listing.Gap(12f);
 
-            listing.CheckboxLabeled("TheMoat_AllowOres".Translate(), ref allowOresInMountain, "TheMoat_AllowOresDesc".Translate());
-            listing.Gap(8f);
+            // An open island has no mountain for ores and caves
+            if (!island || islandTerrain == IslandTerrain.Mountain)
+            {
+                listing.CheckboxLabeled("TheMoat_AllowOres".Translate(), ref allowOresInMountain, "TheMoat_AllowOresDesc".Translate());
+                listing.Gap(8f);
 
-            listing.CheckboxLabeled("TheMoat_Caves".Translate(), ref cavesInMountain,
-                "TheMoat_CavesDesc".Translate(MoatLayout.CaveBufferFromPlains, MoatLayout.CaveBufferFromMapEdge));
-            listing.Gap(8f);
+                listing.CheckboxLabeled("TheMoat_Caves".Translate(), ref cavesInMountain,
+                    "TheMoat_CavesDesc".Translate(MoatLayout.CaveBufferFromPlains, MoatLayout.CaveBufferFromMapEdge));
+                listing.Gap(8f);
+            }
 
             listing.CheckboxLabeled("TheMoat_RemoveWater".Translate(), ref removeWaterOnPlains, "TheMoat_RemoveWaterDesc".Translate());
             listing.Gap(8f);
@@ -87,17 +126,40 @@ namespace TheMoat
 
             listing.NewColumn();
 
-            listing.Label("TheMoat_MoatType".Translate(), -1f, "TheMoat_MoatTypeDesc".Translate());
-            foreach (MoatType type in Enum.GetValues(typeof(MoatType)))
+            if (island)
             {
-                if (listing.RadioButton(("TheMoat_Moat" + type).Translate(), moatType == type, 12f))
+                listing.Label("TheMoat_IslandTerrain".Translate(), -1f, "TheMoat_IslandTerrainDesc".Translate());
+                foreach (IslandTerrain terrain in Enum.GetValues(typeof(IslandTerrain)))
                 {
-                    moatType = type;
+                    if (listing.RadioButton(("TheMoat_Island" + terrain).Translate(), islandTerrain == terrain, 12f))
+                    {
+                        islandTerrain = terrain;
+                    }
                 }
-            }
-            listing.Gap(12f);
+                listing.Gap(12f);
 
-            if (moatType != MoatType.Off)
+                listing.Label("TheMoat_IslandWater".Translate(islandWaterWidth), -1f, "TheMoat_IslandWaterDesc".Translate());
+                islandWaterWidth = Mathf.RoundToInt(listing.Slider(islandWaterWidth, MinMoatWidth, MaxMoatWidth));
+                listing.Gap(12f);
+
+                listing.Label("TheMoat_IslandPassage".Translate(islandPassageWidth), -1f, "TheMoat_IslandPassageDesc".Translate());
+                islandPassageWidth = Mathf.RoundToInt(listing.Slider(islandPassageWidth, 0, MaxLandBridgeWidth));
+                listing.Gap(12f);
+            }
+            else
+            {
+                listing.Label("TheMoat_MoatType".Translate(), -1f, "TheMoat_MoatTypeDesc".Translate());
+                foreach (MoatType type in Enum.GetValues(typeof(MoatType)))
+                {
+                    if (listing.RadioButton(("TheMoat_Moat" + type).Translate(), moatType == type, 12f))
+                    {
+                        moatType = type;
+                    }
+                }
+                listing.Gap(12f);
+            }
+
+            if (!island && moatType != MoatType.Off)
             {
                 listing.Label("TheMoat_MoatWidth".Translate(moatWidth), -1f, "TheMoat_MoatWidthDesc".Translate());
                 moatWidth = Mathf.RoundToInt(listing.Slider(moatWidth, MinMoatWidth, MaxMoatWidth));
@@ -129,6 +191,11 @@ namespace TheMoat
                 moatWidth = 5;
                 landBridgeWidth = 4;
                 shallowFords = 2;
+                mapShape = MoatShape.MountainSide;
+                islandTerrain = IslandTerrain.Mountain;
+                islandPercent = 0.40f;
+                islandWaterWidth = 6;
+                islandPassageWidth = 3;
             }
 
             listing.End();

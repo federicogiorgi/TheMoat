@@ -20,17 +20,30 @@ namespace TheMoat
         Deep
     }
 
+    public enum MoatShape
+    {
+        MountainSide,
+        Island
+    }
+
+    public enum IslandTerrain
+    {
+        Mountain,
+        Open
+    }
+
     public enum MoatWater : byte
     {
         None,
         Shallow,
         Deep,
-        // Dry land where the land bridge crosses the moat
+        // Dry land where the land bridge crosses the moat, or the way in crosses an island's water
         Bridge
     }
 
     // Where the mountain sits on the map. "Depth" is the distance from the map edge the mountain is attached to,
     // "along" the position along that edge. The mountain covers every cell shallower than edgeDepth[along].
+    // On an island map the island sits in the middle instead (islandGrid) and side is where its way in faces.
     public struct MoatLayout
     {
         // At full roughness the foot of the mountain wanders up to this share of the map in and out
@@ -47,6 +60,13 @@ namespace TheMoat
         // and the ends of the moat
         public const int FordWidth = 3;
         private const int FordSpacing = 12;
+        // At full roughness the island's shore wanders up to this share of its radius in and out
+        private const float IslandRoughnessAmplitude = 0.35f;
+        private const int MinIslandRadius = 8;
+        // Open land kept between the island's water and the map edges, for raiders to walk round and roads to leave by
+        private const int IslandMapEdgeMargin = 12;
+        // A mountain island's colony lands this far out from the water, in front of the way in
+        private const int IslandStartDistance = 20;
 
         public MoatSide side;
         public int thickness;
@@ -57,6 +77,16 @@ namespace TheMoat
         private int[] caveDepth;
         // MoatWater per cell (index z * sizeX + x), null without a moat
         private byte[] moatGrid;
+        // Island maps only, per cell: on the island; steps (8-way) to the nearest cell off the island;
+        // steps from the nearest water or mountain cell, minus one
+        private bool[] islandGrid;
+        private int[] insideDepth;
+        private int[] openDistance;
+        public bool islandIsMountain;
+        // Island maps only: where the colony should land
+        public IntVec3 startTarget;
+        private int passageStart;
+        private int passageWidth;
 
         // Per thread: Map Preview generates its previews off the main thread
         [ThreadStatic] private static Map cachedMap;
@@ -67,6 +97,11 @@ namespace TheMoat
         [ThreadStatic] private static int cachedMoatWidth;
         [ThreadStatic] private static int cachedBridgeWidth;
         [ThreadStatic] private static int cachedFords;
+        [ThreadStatic] private static MoatShape cachedShape;
+        [ThreadStatic] private static IslandTerrain cachedIslandTerrain;
+        [ThreadStatic] private static float cachedIslandPercent;
+        [ThreadStatic] private static int cachedIslandWater;
+        [ThreadStatic] private static int cachedIslandPassage;
         [ThreadStatic] private static MoatLayout cachedLayout;
 
         public static MoatLayout For(Map map)
@@ -80,10 +115,19 @@ namespace TheMoat
             int moatWidth = settings != null ? Mathf.Clamp(settings.moatWidth, MoatSettings.MinMoatWidth, MoatSettings.MaxMoatWidth) : 0;
             int bridgeWidth = settings != null ? Mathf.Clamp(settings.landBridgeWidth, 0, MoatSettings.MaxLandBridgeWidth) : 0;
             int fords = settings != null ? Mathf.Clamp(settings.shallowFords, 0, MoatSettings.MaxShallowFords) : 0;
+            MoatShape shape = settings != null ? settings.mapShape : MoatShape.MountainSide;
+            IslandTerrain islandTerrain = settings != null ? settings.islandTerrain : IslandTerrain.Mountain;
+            float islandPercent = settings != null
+                ? Mathf.Clamp(settings.islandPercent, MoatSettings.MinIslandPercent, MoatSettings.MaxIslandPercent) : 0.40f;
+            int islandWater = settings != null
+                ? Mathf.Clamp(settings.islandWaterWidth, MoatSettings.MinMoatWidth, MoatSettings.MaxMoatWidth) : MoatSettings.MinMoatWidth;
+            int islandPassage = settings != null ? Mathf.Clamp(settings.islandPassageWidth, 0, MoatSettings.MaxLandBridgeWidth) : 0;
 
             // Scatterers ask for the layout once per candidate cell, so build it once per map
             if (cachedMap == map && cachedSide == side && cachedPercent == percent && cachedRoughness == roughness
-                && cachedMoatType == moatType && cachedMoatWidth == moatWidth && cachedBridgeWidth == bridgeWidth && cachedFords == fords)
+                && cachedMoatType == moatType && cachedMoatWidth == moatWidth && cachedBridgeWidth == bridgeWidth && cachedFords == fords
+                && cachedShape == shape && cachedIslandTerrain == islandTerrain && cachedIslandPercent == islandPercent
+                && cachedIslandWater == islandWater && cachedIslandPassage == islandPassage)
             {
                 return cachedLayout;
             }
@@ -92,11 +136,18 @@ namespace TheMoat
             layout.side = side;
             layout.sizeX = map.Size.x;
             layout.sizeZ = map.Size.z;
-            layout.thickness = (int)(layout.DepthAxisLength * percent);
             int seed = EdgeSeed(map);
-            layout.BuildEdge(roughness, seed);
-            int[] outerDepth = layout.BuildMoat(moatType, moatWidth, bridgeWidth, fords, seed);
-            layout.BuildNearEdge(outerDepth);
+            if (shape == MoatShape.Island)
+            {
+                layout.BuildIsland(islandTerrain, islandPercent, roughness, islandWater, islandPassage, seed);
+            }
+            else
+            {
+                layout.thickness = (int)(layout.DepthAxisLength * percent);
+                layout.BuildEdge(roughness, seed);
+                int[] outerDepth = layout.BuildMoat(moatType, moatWidth, bridgeWidth, fords, seed);
+                layout.BuildNearEdge(outerDepth);
+            }
 
             cachedMap = map;
             cachedSide = side;
@@ -106,6 +157,11 @@ namespace TheMoat
             cachedMoatWidth = moatWidth;
             cachedBridgeWidth = bridgeWidth;
             cachedFords = fords;
+            cachedShape = shape;
+            cachedIslandTerrain = islandTerrain;
+            cachedIslandPercent = islandPercent;
+            cachedIslandWater = islandWater;
+            cachedIslandPassage = islandPassage;
             cachedLayout = layout;
             return layout;
         }
@@ -241,6 +297,154 @@ namespace TheMoat
             }
         }
 
+        // An island in the middle of the map, round at 0% roughness, ringed by deep water. The only dry way across is a
+        // straight strip on the chosen side, at the middle of that side like the land bridge.
+        private void BuildIsland(IslandTerrain terrain, float percent, float roughness, int waterWidth, int passageWidth, int seed)
+        {
+            islandIsMountain = terrain == IslandTerrain.Mountain;
+            int cells = sizeX * sizeZ;
+            float cx = sizeX / 2f;
+            float cz = sizeZ / 2f;
+            int minSide = Math.Min(sizeX, sizeZ);
+            float maxRadius = Math.Max(1f, minSide / 2f - waterWidth - IslandMapEdgeMargin);
+            float minRadius = Math.Min(MinIslandRadius, maxRadius);
+            float radius = Mathf.Clamp(minSide * percent / 2f, minRadius, maxRadius);
+            float amplitude = roughness * IslandRoughnessAmplitude * radius;
+            int perimeter = Math.Max(64, Mathf.RoundToInt(2f * Mathf.PI * radius));
+            float[] profile = amplitude > 0f ? MoatEdgeNoise.WrappedProfile(perimeter, seed) : null;
+
+            islandGrid = new bool[cells];
+            for (int z = 0; z < sizeZ; z++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    float dx = x + 0.5f - cx;
+                    float dz = z + 0.5f - cz;
+                    float r = radius;
+                    if (profile != null)
+                    {
+                        float pos = (Mathf.Atan2(dz, dx) + Mathf.PI) / (2f * Mathf.PI) * perimeter;
+                        int i0 = (int)pos % perimeter;
+                        float t = pos - Mathf.Floor(pos);
+                        float noise = profile[i0] + (profile[(i0 + 1) % perimeter] - profile[i0]) * t;
+                        r = Mathf.Clamp(radius + amplitude * noise, minRadius, maxRadius);
+                    }
+                    islandGrid[z * sizeX + x] = dx * dx + dz * dz < r * r;
+                }
+            }
+
+            // Water: every cell off the island within waterWidth cells (straight-line distance) of it, as in BuildMoat.
+            // Every cell next to the island, diagonals too, is deep, so nobody reaches the shore except over the way in.
+            int[] nearestSq = new int[cells];
+            for (int i = 0; i < cells; i++) nearestSq[i] = int.MaxValue;
+            float reachSq = (waterWidth + 0.5f) * (waterWidth + 0.5f);
+            float deepSq = (waterWidth - 0.5f) * (waterWidth - 0.5f);
+            for (int z = 0; z < sizeZ; z++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    if (!islandGrid[z * sizeX + x] || !IsShore(x, z)) continue;
+                    for (int oz = -waterWidth; oz <= waterWidth; oz++)
+                    {
+                        for (int ox = -waterWidth; ox <= waterWidth; ox++)
+                        {
+                            int sq = ox * ox + oz * oz;
+                            int nx = x + ox;
+                            int nz = z + oz;
+                            if (sq > reachSq || nx < 0 || nz < 0 || nx >= sizeX || nz >= sizeZ) continue;
+                            int idx = nz * sizeX + nx;
+                            if (!islandGrid[idx] && sq < nearestSq[idx]) nearestSq[idx] = sq;
+                        }
+                    }
+                }
+            }
+
+            this.passageWidth = passageWidth;
+            passageStart = EdgeLength / 2 - passageWidth / 2;
+            int middleDepth = DepthAxisLength / 2;
+            moatGrid = new byte[cells];
+            for (int z = 0; z < sizeZ; z++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    int idx = z * sizeX + x;
+                    if (nearestSq[idx] > reachSq) continue;
+                    IntVec3 c = new IntVec3(x, 0, z);
+                    MoatWater water = IsOnWayIn(c) ? MoatWater.Bridge : nearestSq[idx] <= deepSq ? MoatWater.Deep : MoatWater.Shallow;
+                    moatGrid[idx] = (byte)water;
+                }
+            }
+
+            bool mountain = islandIsMountain;
+            bool[] island = islandGrid;
+            byte[] moat = moatGrid;
+            insideDepth = StepsFrom(i => !island[i]);
+            openDistance = StepsFrom(i => moat[i] != (byte)MoatWater.None || (mountain && island[i]));
+            for (int i = 0; i < cells; i++) openDistance[i]--;
+
+            if (islandIsMountain)
+            {
+                // On the plains in front of the way in, short of the water
+                int mid = EdgeLength / 2;
+                int firstWater = 0;
+                while (firstWater < middleDepth && moatGrid[Index(CellAt(firstWater, mid))] == (byte)MoatWater.None) firstWater++;
+                startTarget = CellAt(Math.Max(IslandMapEdgeMargin / 2, firstWater - IslandStartDistance), mid);
+            }
+            else
+            {
+                startTarget = new IntVec3(sizeX / 2, 0, sizeZ / 2);
+            }
+        }
+
+        private bool IsShore(int x, int z)
+        {
+            for (int d = 0; d < 8; d++)
+            {
+                IntVec3 n = new IntVec3(x, 0, z) + GenAdj.AdjacentCells[d];
+                if (n.x < 0 || n.z < 0 || n.x >= sizeX || n.z >= sizeZ || !islandGrid[n.z * sizeX + n.x]) return true;
+            }
+            return false;
+        }
+
+        // Steps (8-way) from every cell to the nearest source cell; sources are 0
+        private int[] StepsFrom(Func<int, bool> isSource)
+        {
+            int cells = sizeX * sizeZ;
+            int[] steps = new int[cells];
+            Queue<int> queue = new Queue<int>();
+            for (int i = 0; i < cells; i++)
+            {
+                if (isSource(i))
+                {
+                    queue.Enqueue(i);
+                }
+                else
+                {
+                    steps[i] = int.MaxValue / 2;
+                }
+            }
+            while (queue.Count > 0)
+            {
+                int cur = queue.Dequeue();
+                IntVec3 c = new IntVec3(cur % sizeX, 0, cur / sizeX);
+                for (int d = 0; d < 8; d++)
+                {
+                    IntVec3 n = c + GenAdj.AdjacentCells[d];
+                    if (n.x < 0 || n.z < 0 || n.x >= sizeX || n.z >= sizeZ) continue;
+                    int idx = n.z * sizeX + n.x;
+                    if (steps[idx] <= steps[cur] + 1) continue;
+                    steps[idx] = steps[cur] + 1;
+                    queue.Enqueue(idx);
+                }
+            }
+            return steps;
+        }
+
+        private int Index(IntVec3 c)
+        {
+            return Mathf.Clamp(c.z, 0, sizeZ - 1) * sizeX + Mathf.Clamp(c.x, 0, sizeX - 1);
+        }
+
         public bool IsNorthOrSouth
         {
             get { return side == MoatSide.North || side == MoatSide.South; }
@@ -261,6 +465,15 @@ namespace TheMoat
             get
             {
                 int count = 0;
+                if (islandGrid != null)
+                {
+                    if (!islandIsMountain) return 0;
+                    for (int i = 0; i < islandGrid.Length; i++)
+                    {
+                        if (islandGrid[i]) count++;
+                    }
+                    return count;
+                }
                 for (int a = 0; a < edgeDepth.Length; a++) count += edgeDepth[a];
                 return count;
             }
@@ -290,7 +503,40 @@ namespace TheMoat
 
         public bool IsMountain(IntVec3 c)
         {
+            if (islandGrid != null) return islandIsMountain && IsOnIsland(c);
             return Depth(c) < MountainDepthAt(Along(c));
+        }
+
+        public bool HasIsland
+        {
+            get { return islandGrid != null; }
+        }
+
+        public bool IsOnIsland(IntVec3 c)
+        {
+            if (islandGrid == null || c.x < 0 || c.z < 0 || c.x >= sizeX || c.z >= sizeZ) return false;
+            return islandGrid[c.z * sizeX + c.x];
+        }
+
+        // Island maps: the straight line of the way in, from the map edge to the middle of the island. Kept free of
+        // hill rock, so the way in can always be walked.
+        public bool IsOnWayIn(IntVec3 c)
+        {
+            if (islandGrid == null || passageWidth <= 0) return false;
+            int a = Along(c);
+            return a >= passageStart && a < passageStart + passageWidth && Depth(c) < DepthAxisLength / 2;
+        }
+
+        // Mountain island cells with more than margin cells of rock between them and the water
+        public List<IntVec3> InnerMountainCells(int margin)
+        {
+            List<IntVec3> cells = new List<IntVec3>();
+            if (islandGrid == null || !islandIsMountain) return cells;
+            for (int i = 0; i < islandGrid.Length; i++)
+            {
+                if (insideDepth[i] > margin) cells.Add(new IntVec3(i % sizeX, 0, i / sizeX));
+            }
+            return cells;
         }
 
         // Where caves may be dug: deep enough in the mountain and away from every map edge
@@ -301,6 +547,7 @@ namespace TheMoat
             {
                 return false;
             }
+            if (islandGrid != null) return islandIsMountain && insideDepth[c.z * sizeX + c.x] > CaveBufferFromPlains;
             return Depth(c) < caveDepth[Mathf.Clamp(Along(c), 0, caveDepth.Length - 1)];
         }
 
@@ -316,9 +563,11 @@ namespace TheMoat
         }
 
         // How far out on the plains c is from the foot of the mountain (or from the outer bank of the moat), counting
-        // spurs a few cells to the side; zero or negative inside the mountain, the moat and in narrow bays
+        // spurs a few cells to the side; zero or negative inside the mountain, the moat and in narrow bays.
+        // On an island map: from the nearest water (and mountain), on the island too
         public int DistanceFromMountain(IntVec3 c)
         {
+            if (islandGrid != null) return openDistance[Index(c)];
             return Depth(c) - nearEdgeDepth[Mathf.Clamp(Along(c), 0, nearEdgeDepth.Length - 1)];
         }
 
@@ -385,6 +634,22 @@ namespace TheMoat
             for (int a = 0; a < length; a++)
             {
                 result[a] /= peak;
+            }
+            return result;
+        }
+
+        // A profile whose end runs smoothly into its start, for the shore of an island
+        public static float[] WrappedProfile(int length, int seed)
+        {
+            int overlap = Math.Max(1, length / 4);
+            float[] open = Profile(length + overlap, seed);
+            float[] result = new float[length];
+            Array.Copy(open, result, length);
+            // The first cells fade from the profile's continuation past the end into its own start
+            for (int a = 0; a < overlap; a++)
+            {
+                float t = (a + 1f) / (overlap + 1f);
+                result[a] = open[length + a] * (1f - t) + open[a] * t;
             }
             return result;
         }

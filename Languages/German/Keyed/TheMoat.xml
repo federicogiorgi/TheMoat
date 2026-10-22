@@ -27,5 +27,21 @@
   <TheMoat_LandBridgeDesc>Ein Streifen trockenes Land quer über den Graben in der Mitte des Berges: ein natürlicher Engpass. 0 = keine Landbrücke.</TheMoat_LandBridgeDesc>
   <TheMoat_ShallowFords>Seichte Furten: {0}</TheMoat_ShallowFords>
   <TheMoat_ShallowFordsDesc>Stellen, an denen der tiefe Graben nur seichtes Wasser ist, {0} Felder breit, an zufälligen Orten entlang des Berges (für dasselbe Feld der Weltkarte immer dieselben). Ohne Furten und ohne Landbrücke kommt man nur hinüber, indem man darüber baut oder fliegt.</TheMoat_ShallowFordsDesc>
+  <TheMoat_MapShape>Kartenaufteilung:</TheMoat_MapShape>
+  <TheMoat_MapShapeDesc>Berg auf einer Seite: Ein massiver Berg füllt eine Seite der Karte, offene Ebenen den Rest. Insel: Eine Insel in der Mitte der Karte, von tiefem Wasser umgeben, mit einem einzigen Zugang.</TheMoat_MapShapeDesc>
+  <TheMoat_ShapeMountainSide>Berg auf einer Seite</TheMoat_ShapeMountainSide>
+  <TheMoat_ShapeIsland>Insel mit einem Zugang</TheMoat_ShapeIsland>
+  <TheMoat_PassageSide>Zugang von:</TheMoat_PassageSide>
+  <TheMoat_IslandSize>Inselgröße: {0} der Kartenbreite</TheMoat_IslandSize>
+  <TheMoat_IslandSizeDesc>Wie breit die Insel in der Mitte ist. Zwischen ihrem Wasser und den Kartenrändern bleibt immer ein Streifen offener Ebene.</TheMoat_IslandSizeDesc>
+  <TheMoat_ShoreRoughnessDesc>Wie unregelmäßig das Ufer der Insel ist. Bei 0 % ist die Insel rund; höhere Werte fügen Buchten und Landzungen hinzu. Das Wasser folgt dem Ufer ringsum.</TheMoat_ShoreRoughnessDesc>
+  <TheMoat_IslandTerrain>Insel:</TheMoat_IslandTerrain>
+  <TheMoat_IslandTerrainDesc>Ganz Berg: ein einziger massiver Berg mit dickem Dach, in den du deine Basis gräbst; die Kolonie beginnt in der Ebene vor dem Zugang. Offenes Land: normales Gelände mit Boden, Bäumen und Tieren; die Kolonie beginnt in der Mitte der Insel.</TheMoat_IslandTerrainDesc>
+  <TheMoat_IslandMountain>Ganz Berg</TheMoat_IslandMountain>
+  <TheMoat_IslandOpen>Offenes Land (normales Gelände)</TheMoat_IslandOpen>
+  <TheMoat_IslandWater>Tiefes Wasser um die Insel: {0} Felder breit</TheMoat_IslandWater>
+  <TheMoat_IslandWaterDesc>Tiefes Wasser rund um die Insel: Niemand kann hindurchwaten und es friert nie zu. Sein äußerer Rand ist ein ein Feld breites seichtes Ufer.</TheMoat_IslandWaterDesc>
+  <TheMoat_IslandPassage>Zugang: {0} Felder breit</TheMoat_IslandPassage>
+  <TheMoat_IslandPassageDesc>Ein gerader Streifen trockenen Landes über das Wasser auf der gewählten Seite: der einzige Weg zu Fuß auf die Insel. 0 = kein Zugang; man gelangt nur durch Bauen über dem Wasser oder fliegend hinüber.</TheMoat_IslandPassageDesc>
   <TheMoat_ResetDefaults>Auf Standard zurücksetzen</TheMoat_ResetDefaults>
 </LanguageData>
