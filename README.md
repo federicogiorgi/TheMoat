@@ -10,7 +10,9 @@
   <img src="https://img.shields.io/badge/Author-Keldarton-orange" alt="Author">
 </p>
 
-A RimWorld mod that forces your starting colony map (and only that map) to generate with an impassable mountain along one side and open plains on the rest. Built for players who want a subterranean colony with one or a few choke points.
+A simple addon to build defensible bases.
+
+It forces your starting colony map (and only that map) to generate as an impassable mountain on one side, protected by a water moat with a single land bridge; or alternatively as an island surrounded by a deep moat. Many custom options exist to change the initial settings.
 
 ## Defensive highlights
 
