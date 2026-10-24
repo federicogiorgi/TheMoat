@@ -19,7 +19,7 @@ A RimWorld mod that forces your starting colony map (and only that map) to gener
 - No drop pods through the roof: the whole mountain is covered by thick overhead mountain.
 - Concentrated defenses: no 360-degree perimeter to defend. Put your turrets, bunkers and traps at the entrance.
 - If you want full relax: combine this mod with the "no infestations" one.
-- Optional moat: a band of water along the whole mountain face, so raiders have to wade through it or come over the dry land bridge in the middle, a ready-made choke point.
+- Moat (on by default, you can switch it off in the mod options): a band of water along the whole mountain face, so raiders have to wade through it or come over the dry land bridge in the middle, a ready-made choke point.
 - Optional island: instead of a side mountain, you can use The Moat to creat an island in the middle of the map, surrounded by a deep water Moat, with a single dry way in. The island can be full mountain (like Erebor) or standard terrain.
 
 ## Map generation
@@ -27,7 +27,7 @@ A RimWorld mod that forces your starting colony map (and only that map) to gener
 - Choose your side: the mountain sits on the west side by default. Move it to the east, north or south side in the mod settings.
 - The mountain: solid rock with thick overhead roof. No caves (unless you turn them on in the mod options), no hollow pockets, no insect hives, no special features (ancient dangers, ruins, geysers, monolith). Only mineable ore veins, at the density of a vanilla mountainous map, even on flat tiles.
 - The plains: flat open land without hills or lakes. All vanilla surface features spawn there: trees, soil types, ancient dangers, ancient mech remains, steam geysers, ruins, roads, the Anomaly Void Monolith and wildlife.
-- The moat (optional, off by default): shallow water, or deep water with a few shallow fords, along the whole foot of the mountain, also around spurs and into bays. A strip of dry land crosses it in the middle of the mountain.
+- The moat (on by default, you can switch it off in the mod options): shallow water, or deep water with a few shallow fords, along the whole foot of the mountain, also around spurs and into bays. A strip of dry land crosses it in the middle of the mountain.
 - Starting colony only: later settlements, quest sites, encounter maps and camps generate normal vanilla maps.
 - The island (optional, instead of the mountain on one side): an island in the middle of the map, round or with a ragged shore, surrounded by deep water that never freezes, and a single narrow bridge entrance. The island can be a solid rock mountain with thick overhead roof, or standard terrain.
 
@@ -42,10 +42,10 @@ Options > Mod Settings > The Moat:
 - Ore veins in the mountain (default: ON).
 - Remove lakes and water on the plains (default: ON).
 - Flatten hills on the plains (default: ON).
-- Moat along the mountain face (default: none): shallow water, or deep water with shallow fords.
+- Moat along the mountain face (default: deep water): shallow water, or deep water with shallow fords.
 - Moat width: 2 to 15 cells (default: 5). A deep moat keeps a one-cell shallow bank on the plains side.
 - Land bridge in the middle: 0 to 40 cells wide (default: 4). 0 = no land bridge.
-- Shallow fords in a deep moat: 0 to 6, each 3 cells wide, at random spots (default: 2).
+- Shallow fords in a deep moat: 0 to 6, each 3 cells wide, at random spots (default: 0).
 - Map layout: mountain on one side (default) or island with one way in. With the island, the side setting picks where the way in faces and the edge roughness shapes the shore; the moat settings don’t apply.
 - Island: all mountain (default) or open land (normal terrain).
 - Island size: 20% to 70% of the map width (default: 40%). Open plains always stay between its water and the map edges.

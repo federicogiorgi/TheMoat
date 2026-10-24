@@ -14,6 +14,8 @@ namespace TheMoat
         public const int MaxShallowFords = 6;
         public const float MinIslandPercent = 0.20f;
         public const float MaxIslandPercent = 0.70f;
+        // 2: the deep moat with no fords became the default
+        public const int CurrentSettingsVersion = 2;
 
         public MoatSide mountainSide = MoatSide.West;
         public float mountainPercent = 0.50f;
@@ -22,10 +24,11 @@ namespace TheMoat
         public bool cavesInMountain = false;
         public bool removeWaterOnPlains = true;
         public bool flattenHillsOnPlains = true;
-        public MoatType moatType = MoatType.Off;
+        public int settingsVersion = CurrentSettingsVersion;
+        public MoatType moatType = MoatType.Deep;
         public int moatWidth = 5;
         public int landBridgeWidth = 4;
-        public int shallowFords = 2;
+        public int shallowFords = 0;
         public MoatShape mapShape = MoatShape.MountainSide;
         public IslandTerrain islandTerrain = IslandTerrain.Mountain;
         public float islandPercent = 0.40f;
@@ -35,6 +38,14 @@ namespace TheMoat
         public override void ExposeData()
         {
             base.ExposeData();
+            // Values equal to their default are not written, so a file saved before version 2
+            // left out moatType and shallowFords when they were at the old defaults: keep those
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                settingsVersion = CurrentSettingsVersion;
+            }
+            Scribe_Values.Look(ref settingsVersion, "settingsVersion", 1);
+            bool oldDefaults = settingsVersion < 2;
             Scribe_Values.Look(ref mountainSide, "mountainSide", MoatSide.West);
             Scribe_Values.Look(ref mountainPercent, "mountainPercent", 0.50f);
             Scribe_Values.Look(ref edgeRoughness, "edgeRoughness", 0f);
@@ -42,10 +53,10 @@ namespace TheMoat
             Scribe_Values.Look(ref cavesInMountain, "cavesInMountain", false);
             Scribe_Values.Look(ref removeWaterOnPlains, "removeWaterOnPlains", true);
             Scribe_Values.Look(ref flattenHillsOnPlains, "flattenHillsOnPlains", true);
-            Scribe_Values.Look(ref moatType, "moatType", MoatType.Off);
+            Scribe_Values.Look(ref moatType, "moatType", oldDefaults ? MoatType.Off : MoatType.Deep);
             Scribe_Values.Look(ref moatWidth, "moatWidth", 5);
             Scribe_Values.Look(ref landBridgeWidth, "landBridgeWidth", 4);
-            Scribe_Values.Look(ref shallowFords, "shallowFords", 2);
+            Scribe_Values.Look(ref shallowFords, "shallowFords", oldDefaults ? 2 : 0);
             Scribe_Values.Look(ref mapShape, "mapShape", MoatShape.MountainSide);
             Scribe_Values.Look(ref islandTerrain, "islandTerrain", IslandTerrain.Mountain);
             Scribe_Values.Look(ref islandPercent, "islandPercent", 0.40f);
@@ -187,10 +198,10 @@ namespace TheMoat
                 cavesInMountain = false;
                 removeWaterOnPlains = true;
                 flattenHillsOnPlains = true;
-                moatType = MoatType.Off;
+                moatType = MoatType.Deep;
                 moatWidth = 5;
                 landBridgeWidth = 4;
-                shallowFords = 2;
+                shallowFords = 0;
                 mapShape = MoatShape.MountainSide;
                 islandTerrain = IslandTerrain.Mountain;
                 islandPercent = 0.40f;
